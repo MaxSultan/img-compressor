@@ -25,11 +25,11 @@
 </head>
 
 <body>
-    <div id="root">
+    <div class="js-root">
         <h1>Upload an image and see the result</h1>
-        <input id="img-input" type="file" accept="image/*" style="display:block" />
-        <button id="settingsButton">Show Settings</button>
-        <form id="settings" style="display: none">
+        <input name="img-input" type="file" accept="image/*" style="display:block" />
+        <button class="js-settings-button">Show Settings</button>
+        <form class="js-settings" style="display: none">
             <label for="image-quality">Image Quality:</label>
             <select name="image-quality" id="image-quality">
                 <option value="">--Please choose an option--</option>
@@ -58,7 +58,7 @@
             </formfield>
         </form>
 
-        <div id="images-container"></div>
+        <div class="js-images-container"></div>
     </div>
     <script src="js/index.js"></script>
 </body>
