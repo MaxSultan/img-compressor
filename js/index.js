@@ -55,9 +55,9 @@ const insertBreak = () => {
 }
 
 const toggleElement = (element) => {
-  if (element.style.display === 'none') {
-    element.style = "display: initial"
-  } else if (element.style.display === 'initial') {
+  if (element.style.display === "none") {
+    element.style = ""
+  } else if (element.style.display === "") {
     element.style = "display: none"
   }
 }

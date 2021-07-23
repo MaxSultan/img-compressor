@@ -44,10 +44,17 @@
                 <option value="0.9">90%</option>
                 <option value="1.0">100%</option>
             </select>
-            <label for="image-dimension">Select Dimension:</label>
+
             <formfield>
-                <input type="radio" value="heigth" />
-                <input type="radio" value="width" />
+                <label for="image-dimension">Select Dimension:</label>
+                <label for="height">
+                    <input type="radio" value="heigth" name="dimensions" />
+                    Height
+                </label>
+                <label for="width">
+                    <input type="radio" value="width" name="dimensions" />
+                    Width
+                </label>
             </formfield>
         </form>
 
