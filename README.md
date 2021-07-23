@@ -11,11 +11,11 @@ Here are some basic definitions:
 
 
 Implimented Features:
-A user can upload an image 
-A user can view a preview of the compressed image
-A user can see the image file size before and after compression
-A user can download a compressed version of the image
-A user can customize the quality of the compressed image
+- As a user, I can upload an image 
+- As a user, I can view a preview of the compressed image
+- As a user, I can see the image file size before and after compression
+- As a user, I can download a compressed version of the image
+- As a user, I can customize the quality of the compressed image
 
 Here are some questions I still have:
 How does Bilinear Interpolation/BiCubic Interpolation work in compression instead of expansion? In expanding the image you need more data that you have, but in compression you already have all the data you need.
