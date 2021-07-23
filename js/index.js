@@ -5,7 +5,7 @@ function $(sel, el) {
 const MAX_WIDTH = 320;
 const MAX_HEIGHT = 180;
 const MIME_TYPE = "image/jpeg";
-let quality = $('select[name="image-quality"]').value;
+let quality = parseFloat($('select[name="image-quality"]').value, 10);
 
 const input = $('input[name="img-input"]');
 const qualitySelector = $('select[name="image-quality"]');
@@ -58,7 +58,7 @@ const insertBreak = () => {
 
 qualitySelector.onchange = (event) => {
   event.preventDefault();
-  quality = parseInt(event.target.value, 10);
+  quality = parseFloat(event.target.value, 10);
 }
 
 input.onchange = (event) => {
