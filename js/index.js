@@ -9,8 +9,8 @@ let quality = parseFloat($('select[name="image-quality"]').value, 10);
 
 const input = $('input[name="img-input"]');
 const qualitySelector = $('select[name="image-quality"]');
-const settingsButton = document.getElementById("settingsButton");
-const settingsForm = document.getElementById("settings");
+const settingsButton = $('button[name="js-settings-button"]')
+const settingsForm = $('form[class="js-settings-form"]')
 
 
 const calculateSize = (img, maxWidth, maxHeight) => {
