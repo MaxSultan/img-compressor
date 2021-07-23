@@ -25,12 +25,12 @@
 </head>
 
 <body>
-    <div id="root">
+    <div class="js-root">
         <h1>Upload an image and see the result</h1>
-        <input id="img-input" type="file" accept="image/*" style="display:block" />
+        <input name="img-input" type="file" accept="image/*" style="display:block" />
         <p>image quality is set to 70% by default. You can customize it if you wish</p>
         <p>Image Quality</p>
-        <select name="pets" id="image-quality">
+        <select name="image-quality">
             <option value="">--Please choose an option--</option>
             <option value="0.1">10%</option>
             <option value="0.2">20%</option>
@@ -38,12 +38,12 @@
             <option value="0.4">40%</option>
             <option value="0.5">50%</option>
             <option value="0.6">60%</option>
-            <option value="0.7">70%</option>
+            <option value="0.7" selected>70%</option>
             <option value="0.8">80%</option>
             <option value="0.9">90%</option>
             <option value="1.0">100%</option>
         </select>
-        <div id="images-container"></div>
+        <div class="js-images-container"></div>
     </div>
     <script src="js/index.js"></script>
 </body>
