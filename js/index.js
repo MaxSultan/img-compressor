@@ -1,44 +1,12 @@
 const MAX_WIDTH = 320;
 const MAX_HEIGHT = 180;
 const MIME_TYPE = "image/jpeg";
-const QUALITY = 0.7;
+let quality = 0.7;
 
 const input = document.getElementById("img-input");
+const qualitySelector = document.getElementById("image-quality");
 
-input.onchange = (event) => {
-  const file = event.target.files[0]; // get the file
-  const blobURL = URL.createObjectURL(file);
-  const img = new Image();
-  img.src = blobURL;
-
-  img.onerror = ()  => {
-    URL.revokeObjectURL(this.src);
-    // Handle the failure properly
-    alert("Cannot load image");
-  };
-
-  img.onload = () => {
-    URL.revokeObjectURL(this.src);
-    const [newWidth, newHeight] = calculateSize(img, MAX_WIDTH, MAX_HEIGHT);
-    const canvas = document.createElement("canvas");
-    canvas.width = newWidth;
-    canvas.height = newHeight;
-    const context = canvas.getContext("2d");
-    context.drawImage(img, 0, 0, newWidth, newHeight);
-    canvas.toBlob(
-      (blob) => {
-        // Handle the compressed image. es. upload or save in local state
-        displayInfo('Original file', file);
-        displayInfo('Compressed file', blob);
-      },
-      MIME_TYPE,
-      QUALITY
-    );
-    document.getElementById("root").append(canvas);
-  };
-};
-
-function calculateSize(img, maxWidth, maxHeight) {
+const calculateSize = (img, maxWidth, maxHeight) => {
   let width = img.width;
   let height = img.height;
 
@@ -57,17 +25,81 @@ function calculateSize(img, maxWidth, maxHeight) {
   return [width, height];
 }
 
-// Utility functions for demo purpose
-
-function displayInfo(label, file) {
-  const p = document.createElement('p');
+const displayInfo = (label, file) => {
+  const p = document.createElement("p");
   p.innerText = `${label} - ${readableBytes(file.size)}`;
-  document.getElementById('root').append(p);
+  document.getElementById("images-container").append(p);
 }
 
-function readableBytes(bytes) {
+const displayDownloadLink = (linkText, blobData) => {
+  var downloadLink = document.createElement("a");
+  downloadLink.innerText = linkText;
+  let url = URL.createObjectURL(blobData);
+  downloadLink.href = url;
+  downloadLink.download = url;
+  document.getElementById("images-container").append(downloadLink)
+}
+
+const readableBytes = (bytes) => {
   const i = Math.floor(Math.log(bytes) / Math.log(1024)),
-    sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-  return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+  return (bytes / Math.pow(1024, i)).toFixed(2) + " " + sizes[i];
 }
+
+const insertBreak = () => {
+  let breakElement = document.createElement("br");
+  document.getElementById("images-container").append(breakElement)
+}
+
+qualitySelector.onchange = (event) => {
+  event.preventDefault();
+  quality = Number(event.target.value);
+}
+
+input.onchange = (event) => {
+  const file = event.target.files[0]; // get the file
+  const blobURL = URL.createObjectURL(file);
+  const img = new Image();
+  img.src = blobURL;
+
+  img.onerror = () => {
+    URL.revokeObjectURL(this.src);
+    // Handle the failure properly
+    alert("Cannot load image");
+  };
+
+  img.onload = () => {
+    URL.revokeObjectURL(this.src);
+    const [newWidth, newHeight] = calculateSize(img, MAX_WIDTH, MAX_HEIGHT);
+    const canvas = document.createElement("canvas");
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+
+    const context = canvas.getContext("2d");
+    const canvas2 = document.createElement("canvas");
+    const context2 = canvas2.getContext("2d")
+    canvas2.height = img.height * 0.5;
+    canvas2.width = img.width * 0.5;
+
+    // faux bi-cubic image smoothing 
+    context2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
+    context2.drawImage(img, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5);
+    context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, canvas.width, canvas.height);
+    canvas.toBlob(
+      (blob) => {
+        // Handle the compressed images. upload or save in local state
+        displayInfo("Original file", file);
+        displayInfo("Compressed file", blob);
+        // add a button with a download feature here
+        displayDownloadLink("Dowload Minified Image", blob);
+        insertBreak();
+      },
+      MIME_TYPE,
+      quality
+    );
+    document.getElementById("images-container").append(canvas);
+    input.value = "";
+  };
+};
+

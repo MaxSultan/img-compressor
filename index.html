@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Lossy Image Converter</title>
-    <meta name="description" content="A simple HTML5 Template for new projects.">
-    <meta name="author" content="SitePoint">
+    <meta name="description" content="Lossy image compression through an HTML5 Canvas Element">
+    <meta name="author" content="Max Sultan">
 
     <meta property="og:title" content="A Basic HTML5 Template">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
-    <meta property="og:description" content="A simple HTML5 Template for new projects.">
+    <meta property="og:url" content="https://maxsultan.github.io/img-compressor/">
+    <meta property="og:description" content="Lossy image compression through an HTML5 Canvas Element">
     <meta property="og:image" content="image.png">
 
     <link rel="icon" href="/favicon.ico">
@@ -25,8 +25,24 @@
 
 <body>
     <div id="root">
-        <p>Upload an image and see the result</p>
+        <h1>Upload an image and see the result</h1>
         <input id="img-input" type="file" accept="image/*" style="display:block" />
+        <p>image quality is set to 70% by default. You can customize it if you wish</p>
+        <p>Image Quality</p>
+        <select name="pets" id="image-quality">
+            <option value="">--Please choose an option--</option>
+            <option value="0.1">10%</option>
+            <option value="0.2">20%</option>
+            <option value="0.3">30%</option>
+            <option value="0.4">40%</option>
+            <option value="0.5">50%</option>
+            <option value="0.6">60%</option>
+            <option value="0.7">70%</option>
+            <option value="0.8">80%</option>
+            <option value="0.9">90%</option>
+            <option value="1.0">100%</option>
+        </select>
+        <div id="images-container"></div>
     </div>
     <script src="js/index.js"></script>
 </body>
