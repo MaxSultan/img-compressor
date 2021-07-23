@@ -5,6 +5,8 @@ let quality = 0.7;
 
 const input = document.getElementById("img-input");
 const qualitySelector = document.getElementById("image-quality");
+const settingsButton = document.getElementById("settingsButton");
+const settingsForm = document.getElementById("settings");
 
 const calculateSize = (img, maxWidth, maxHeight) => {
   let width = img.width;
@@ -50,6 +52,23 @@ const readableBytes = (bytes) => {
 const insertBreak = () => {
   let breakElement = document.createElement("br");
   document.getElementById("images-container").append(breakElement)
+}
+
+const toggleElement = (element) => {
+  if (element.style.display === 'none') {
+    element.style = "display: initial"
+  } else if (element.style.display === 'initial') {
+    element.style = "display: none"
+  }
+}
+
+settingsButton.onclick = () => {
+  toggleElement(settingsForm)
+  if (settingsButton.innerText === "Show Settings") {
+    settingsButton.innerText = "Hide Settings"
+  } else if (settingsButton.innerText === "Hide Settings") {
+    settingsButton.innerText = "Show Settings"
+  }
 }
 
 qualitySelector.onchange = (event) => {
