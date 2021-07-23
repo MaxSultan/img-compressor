@@ -96,7 +96,7 @@ input.onchange = (event) => {
         displayInfo("Original file", file);
         displayInfo("Compressed file", blob);
         // add a button with a download feature here
-        displayDownloadLink("Dowload Minified Image", blob);
+        displayDownloadLink("Download Minified Image", blob);
         insertBreak();
       },
       MIME_TYPE,
