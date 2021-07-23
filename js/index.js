@@ -1,10 +1,14 @@
+function $(sel, el) {
+  return (el || document.body).querySelector(sel);
+}
+
 const MAX_WIDTH = 320;
 const MAX_HEIGHT = 180;
 const MIME_TYPE = "image/jpeg";
-let quality = 0.7;
+let quality = $('select[name="image-quality"]').value;
 
-const input = document.getElementById("img-input");
-const qualitySelector = document.getElementById("image-quality");
+const input = $('input[name="img-input"]');
+const qualitySelector = $('select[name="image-quality"]');
 
 const calculateSize = (img, maxWidth, maxHeight) => {
   let width = img.width;
@@ -28,7 +32,7 @@ const calculateSize = (img, maxWidth, maxHeight) => {
 const displayInfo = (label, file) => {
   const p = document.createElement("p");
   p.innerText = `${label} - ${readableBytes(file.size)}`;
-  document.getElementById("images-container").append(p);
+  $(".js-images-container").append(p);
 }
 
 const displayDownloadLink = (linkText, blobData) => {
@@ -37,7 +41,7 @@ const displayDownloadLink = (linkText, blobData) => {
   let url = URL.createObjectURL(blobData);
   downloadLink.href = url;
   downloadLink.download = url;
-  document.getElementById("images-container").append(downloadLink)
+  $(".js-images-container").append(downloadLink)
 }
 
 const readableBytes = (bytes) => {
@@ -49,12 +53,12 @@ const readableBytes = (bytes) => {
 
 const insertBreak = () => {
   let breakElement = document.createElement("br");
-  document.getElementById("images-container").append(breakElement)
+  $(".js-images-container").append(breakElement)
 }
 
 qualitySelector.onchange = (event) => {
   event.preventDefault();
-  quality = Number(event.target.value);
+  quality = parseInt(event.target.value, 10);
 }
 
 input.onchange = (event) => {
@@ -98,7 +102,7 @@ input.onchange = (event) => {
       MIME_TYPE,
       quality
     );
-    document.getElementById("images-container").append(canvas);
+    $(".js-images-container").append(canvas);
     input.value = "";
   };
 };
