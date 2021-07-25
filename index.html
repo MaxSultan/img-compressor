@@ -47,14 +47,16 @@
 
             <formfield>
                 <label for="image-dimension">Select Dimension:</label>
-                <label for="height">
-                    <input type="radio" value="heigth" name="dimensions" />
+                <label for="js-dimensions">
+                    <input type="radio" value="height" name="js-dimensions" onclick="handleRadioClick(this)"/>
                     Height
                 </label>
-                <label for="width">
-                    <input type="radio" value="width" name="dimensions" />
+                <label for="js-dimensions">
+                    <input type="radio" value="width" name="js-dimensions" onclick="handleRadioClick(this)"/>
                     Width
                 </label>
+                <label for="js-dimension-pixels">Dimension in Pixels: </label>
+                <input name="js-dimension-pixels" type="number" />
             </formfield>
         </form>
 
