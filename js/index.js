@@ -3,8 +3,8 @@ const $ = (sel, el) => {
 }
 
 const MIME_TYPE = "image/jpeg";
-let MAX_WIDTH = 320;
-let MAX_HEIGHT = 180;
+let maxWidth = 320;
+let maxheight = 180;
 let quality = parseFloat($('select[name="image-quality"]').value, 10);
 let selectedDimension;
 let dimensionPixels;
@@ -111,6 +111,7 @@ dimensionPixelInput.onchange = (event) => {
 }
 
 /* End of Settings Events */
+
 input.onchange = (event) => {
   const file = event.target.files[0]; // get the file
   const blobURL = URL.createObjectURL(file);
@@ -125,7 +126,7 @@ input.onchange = (event) => {
 
   img.onload = () => {
     URL.revokeObjectURL(this.src);
-    const [newWidth, newHeight] = calculateSize(img, MAX_WIDTH, MAX_HEIGHT, selectedDimension, dimensionPixels);
+    const [newWidth, newHeight] = calculateSize(img, maxWidth, maxheight, selectedDimension, dimensionPixels);
     const canvas = document.createElement("canvas");
     canvas.width = newWidth;
     canvas.height = newHeight;
