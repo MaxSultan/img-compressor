@@ -8,17 +8,18 @@ let MAX_HEIGHT = 180;
 let quality = parseFloat($('select[name="image-quality"]').value, 10);
 let selectedDimension;
 let dimensionPixels;
+let smoothingOptions;
 
 const input = $('input[name="img-input"]');
 const qualitySelector = $('select[name="image-quality"]');
 const settingsButton = $('button[name="js-settings-button"]')
 const settingsForm = $('form[class="js-settings-form"]')
 const dimensionPixelInput = $('input[name="js-dimension-pixels"]')
+const smoothingSelector = $('select[name="smoothing-options"]')
 
 const calculateSize = (img, maxWidth, maxHeight, selectedDimension, dimensionPixels) => {
   let width = img.width;
   let height = img.height;
-  debugger;
   // calculate the width and height, constraining the proportions
   if (selectedDimension === "width" && dimensionPixels != undefined && !isNaN(dimensionPixels)) {
     if (width > maxWidth) {
@@ -99,6 +100,11 @@ qualitySelector.onchange = (event) => {
   quality = parseFloat(event.target.value, 10);
 }
 
+smoothingSelector.onchange = (event) => {
+  event.preventDefault();
+  smoothingOptions = event.target.value;
+}
+
 dimensionPixelInput.onchange = (event) => {
   event.preventDefault();
   dimensionPixels = parseFloat(event.target.value, 10);
@@ -113,7 +119,7 @@ input.onchange = (event) => {
 
   img.onerror = () => {
     URL.revokeObjectURL(this.src);
-    // Handle the failure properly
+    // TODO: Handle the failure properly
     alert("Cannot load image");
   };
 
@@ -130,10 +136,14 @@ input.onchange = (event) => {
     canvas2.height = newHeight * 0.5;
     canvas2.width = newWidth * 0.5;
 
-    // faux bi-cubic image smoothing 
-    context2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
-    context2.drawImage(img, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5);
-    context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, canvas.width, canvas.height);
+    if (smoothingOptions === 'bi-linear') {
+      context.drawImage(img, 0, 0, newWidth, newHeight);
+    } else {
+      // faux bi-cubic image smoothing 
+      context2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
+      context2.drawImage(img, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5);
+      context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, canvas.width, canvas.height);
+    }
     canvas.toBlob(
       (blob) => {
         // Handle the compressed images. upload or save in local state

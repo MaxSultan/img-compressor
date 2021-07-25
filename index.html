@@ -31,7 +31,7 @@
         <button name="js-settings-button">Show Settings</button>
         <form class="js-settings-form" style="display: none">
             <label for="image-quality">Image Quality:</label>
-            <select name="image-quality" id="image-quality">
+            <select name="image-quality">
                 <option value="">--Please choose an option--</option>
                 <option value="0.1">10%</option>
                 <option value="0.2">20%</option>
@@ -57,6 +57,14 @@
                 </label>
                 <label for="js-dimension-pixels">Dimension in Pixels: </label>
                 <input name="js-dimension-pixels" type="number" />
+            </formfield>
+            <formfield>
+                <label for="smoothing-options">Smoothing Options:</label>
+                <select name="smoothing-options">
+                    <option value="">--Please choose an option--</option>
+                    <option value="bi-linear">Bi-linear Smoothing</option>
+                    <option value="bi-cubic">Bi-Cubic Smoothing</option>
+                </select>
             </formfield>
         </form>
 
