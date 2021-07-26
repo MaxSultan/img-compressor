@@ -28,21 +28,46 @@
     <div class="js-root">
         <h1>Upload an image and see the result</h1>
         <input name="img-input" type="file" accept="image/*" style="display:block" />
-        <p>image quality is set to 70% by default. You can customize it if you wish</p>
-        <p>Image Quality</p>
-        <select name="image-quality">
-            <option value="">--Please choose an option--</option>
-            <option value="0.1">10%</option>
-            <option value="0.2">20%</option>
-            <option value="0.3">30%</option>
-            <option value="0.4">40%</option>
-            <option value="0.5">50%</option>
-            <option value="0.6">60%</option>
-            <option value="0.7" selected>70%</option>
-            <option value="0.8">80%</option>
-            <option value="0.9">90%</option>
-            <option value="1.0">100%</option>
-        </select>
+        <button name="js-settings-button">Show Settings</button>
+        <form class="js-settings-form" style="display: none">
+            <label for="image-quality">Image Quality:</label>
+            <select name="image-quality">
+                <option value="">--Please choose an option--</option>
+                <option value="0.1">10%</option>
+                <option value="0.2">20%</option>
+                <option value="0.3">30%</option>
+                <option value="0.4">40%</option>
+                <option value="0.5">50%</option>
+                <option value="0.6">60%</option>
+                <option value="0.7" selected>70%</option>
+                <option value="0.8">80%</option>
+                <option value="0.9">90%</option>
+                <option value="1.0">100%</option>
+            </select>
+
+            <formfield>
+                <label for="image-dimension">Select Dimension:</label>
+                <label for="js-dimensions">
+                    <input type="radio" value="height" name="js-dimensions" onclick="handleRadioClick(this)"/>
+                    Height
+                </label>
+                <label for="js-dimensions">
+                    <input type="radio" value="width" name="js-dimensions" onclick="handleRadioClick(this)"/>
+                    Width
+                </label>
+                <label for="js-dimension-pixels">Dimension in Pixels: </label>
+                <input name="js-dimension-pixels" type="number" />
+            </formfield>
+            <formfield>
+                <label for="smoothing-options">Smoothing Options:</label>
+                <select name="smoothing-options">
+                    <option value="">--Please choose an option--</option>
+                    <option value="bi-linear">Bi-linear Smoothing</option>
+                    <option value="bi-cubic">Bi-Cubic Smoothing</option>
+                </select>
+            </formfield>
+        </form>
+
         <div class="js-images-container"></div>
     </div>
     <script src="js/index.js"></script>
