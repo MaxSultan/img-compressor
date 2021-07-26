@@ -5,3 +5,9 @@ body{
 button[name="js-settings-button"]{
     width: 180px;
 }
+
+.js-images-container{
+    display: flex;
+    justify-content: space-evenly;
+    overflow-x: scroll;
+}

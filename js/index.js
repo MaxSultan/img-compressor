@@ -45,19 +45,19 @@ const calculateSize = (img, maxWidth, maxHeight, selectedDimension, dimensionPix
   return [width, height];
 }
 
-const displayInfo = (label, file) => {
+const displayInfo = (label, file, parentElement) => {
   const p = document.createElement("p");
   p.innerText = `${label} - ${readableBytes(file.size)}`;
-  $(".js-images-container").append(p);
+  parentElement.append(p);
 }
 
-const displayDownloadLink = (linkText, blobData) => {
+const displayDownloadLink = (linkText, blobData, parentElement) => {
   var downloadLink = document.createElement("a");
   downloadLink.innerText = linkText;
   let url = URL.createObjectURL(blobData);
   downloadLink.href = url;
   downloadLink.download = url;
-  $(".js-images-container").append(downloadLink)
+  parentElement.append(downloadLink)
 }
 
 const readableBytes = (bytes) => {
@@ -67,9 +67,9 @@ const readableBytes = (bytes) => {
   return (bytes / Math.pow(1024, i)).toFixed(2) + " " + sizes[i];
 }
 
-const insertBreak = () => {
+const insertBreak = (parentElement) => {
   let breakElement = document.createElement("br");
-  $(".js-images-container").append(breakElement)
+  parentElement.append(breakElement)
 }
 
 const toggleElement = (element) => {
@@ -83,6 +83,12 @@ const toggleElement = (element) => {
 // This syntax was much cleaner than the equivalent JS only syntax
 const handleRadioClick = (element) => {
   selectedDimension = element.value;
+}
+
+const insertImageDiv = () => {
+  let currentDiv = document.createElement("div")
+  $(".js-images-container").append(currentDiv);
+  return currentDiv;
 }
 
 /* Settings Events */
@@ -148,15 +154,16 @@ input.onchange = (event) => {
     canvas.toBlob(
       (blob) => {
         // Handle the compressed images. upload or save in local state
-        displayInfo("Original file", file);
-        displayInfo("Compressed file", blob);
-        displayDownloadLink("Download Minified Image", blob);
-        insertBreak();
+        let element = insertImageDiv();
+        element.append(canvas);
+        displayInfo("Original file", file, element);
+        displayInfo("Compressed file", blob, element);
+        displayDownloadLink("Download Minified Image", blob, element);
+        insertBreak(element);
       },
       MIME_TYPE,
       quality
     );
-    $(".js-images-container").append(canvas);
     input.value = "";
   };
 };
