@@ -3,43 +3,65 @@ const $ = (sel, el) => {
 }
 
 const MIME_TYPE = "image/jpeg";
-let maxWidth = 320;
-let maxheight = 180;
+const DEFAULT_WIDTH = 320;
+const DEFAULT_HEIGHT = 180;
 let quality = parseFloat($('select[name="image-quality"]').value, 10);
-let selectedDimension;
-let dimensionPixels;
 let smoothingOptions;
+let inputHeight;
+let inputWidth;
+let aspectRatioPreserved = true;
 
 const input = $('input[name="img-input"]');
 const qualitySelector = $('select[name="image-quality"]');
-const settingsButton = $('button[name="js-settings-button"]')
-const settingsForm = $('form[class="js-settings-form"]')
-const dimensionPixelInput = $('input[name="js-dimension-pixels"]')
-const smoothingSelector = $('select[name="smoothing-options"]')
+const settingsButton = $('button[name="js-settings-button"]');
+const settingsForm = $('form[class="js-settings-form"]');
+const widthInput = $('input[name="js-width"]');
+const heightInput = $('input[name="js-height"]')
+const aspectRatioSelector = $('input[name="js-aspect-ratio"]');
+const smoothingSelector = $('select[name="smoothing-options"]');
 
-const calculateSize = (img, maxWidth, maxHeight, selectedDimension, dimensionPixels) => {
+// TODO: add form elements and data fields to an object 
+const settingFormObject = {
+
+}
+
+const calculateSize = (img, defaultWidth, defaultHeight, aspectRatioPreserved, inputWidth, inputHeight) => {
+
   let width = img.width;
   let height = img.height;
-  // calculate the width and height, constraining the proportions
-  if (selectedDimension === "width" && dimensionPixels != undefined && !isNaN(dimensionPixels)) {
-    if (width > maxWidth) {
-      height = Math.round((height * dimensionPixels) / width);
-      width = dimensionPixels;
-    }
-  } else if (selectedDimension === "height" && dimensionPixels != undefined && !isNaN(dimensionPixels)) {
-    width = Math.round((width * dimensionPixels) / height);
-    height = dimensionPixels;
-  } else {
-    if (width > height) {
-      if (width > maxWidth) {
-        height = Math.round((height * maxWidth) / width);
-        width = maxWidth;
-      }
+  let aspectRatio = width / height;
+
+  if (aspectRatioPreserved) {
+    if (inputWidth && inputHeight) {
+      height = inputHeight;
+      width = Math.round(inputHeight * aspectRatio);
+    } else if (!inputWidth && inputHeight) {
+      height = inputHeight;
+      width = Math.round(inputHeight * aspectRatio);
+    } else if (!inputHeight && inputWidth) {
+      height = inputWidth * aspectRatio;
+      width = inputWidth;
     } else {
-      if (height > maxHeight) {
-        width = Math.round((width * maxHeight) / height);
-        height = maxHeight;
+      if (width > height) {
+        if (width > defaultWidth) {
+          height = Math.round(defaultWidth * aspectRatio);
+          width = defaultWidth;
+        }
+      } else {
+        if (height > defaultHeight) {
+          width = Math.round(defaultHeight * aspectRatio);
+          height = defaultHeight;
+        }
       }
+    }
+  } else {
+    if (inputWidth && inputHeight) {
+      height = inputHeight;
+      width = inputWidth;
+    } else if (!inputWidth && inputHeight) {
+      height = inputHeight;
+    } else if (!inputHeight && inputWidth) {
+      width = inputWidth;
     }
   }
   return [width, height];
@@ -79,14 +101,9 @@ const toggleElement = (element) => {
     element.style = "display: none"
   }
 }
-// This is the only function in the JS file that is called in the HTML element. 
-// This syntax was much cleaner than the equivalent JS only syntax
-const handleRadioClick = (element) => {
-  selectedDimension = element.value;
-}
 
 const insertImageDiv = () => {
-  let currentDiv = document.createElement("div")
+  let currentDiv = document.createElement("div");
   $(".js-images-container").append(currentDiv);
   return currentDiv;
 }
@@ -111,11 +128,18 @@ smoothingSelector.onchange = (event) => {
   smoothingOptions = event.target.value;
 }
 
-dimensionPixelInput.onchange = (event) => {
-  event.preventDefault();
-  dimensionPixels = parseFloat(event.target.value, 10);
+aspectRatioSelector.onchange = () => {
+  if (this.checked) aspectRatioPreserved = true;
+  else aspectRatioPreserved = false;
 }
 
+heightInput.onchange = (event) => {
+  inputHeight = parseFloat(event.target.value, 10);
+}
+
+widthInput.onchange = (event) => {
+  inputWidth = parseFloat(event.target.value, 10);
+}
 /* End of Settings Events */
 
 input.onchange = (event) => {
@@ -132,7 +156,7 @@ input.onchange = (event) => {
 
   img.onload = () => {
     URL.revokeObjectURL(this.src);
-    const [newWidth, newHeight] = calculateSize(img, maxWidth, maxheight, selectedDimension, dimensionPixels);
+    const [newWidth, newHeight] = calculateSize(img, DEFAULT_WIDTH, DEFAULT_HEIGHT, aspectRatioPreserved, inputWidth, inputHeight);
     const canvas = document.createElement("canvas");
     canvas.width = newWidth;
     canvas.height = newHeight;

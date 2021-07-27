@@ -1,13 +1,18 @@
 body{
     padding: 20px;
 }
-
 button[name="js-settings-button"]{
     width: 180px;
 }
-
 .js-images-container{
-    display: flex;
+    /* display: flex; */
     justify-content: space-evenly;
     overflow-x: scroll;
+    padding: 50px;
+}
+fieldset {
+    border-style: none;
+}
+fieldset label {
+    display: inline-block;
 }
