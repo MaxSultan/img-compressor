@@ -25,7 +25,7 @@ const settingFormObject = {
 
 }
 
-const timesAspectRatio = (dimension) => {
+const timesAspectRatio = (dimension, aspectRatio) => {
   return Math.round(dimension * aspectRatio)
 }
 
@@ -37,37 +37,36 @@ const calculateSize = (img, defaultWidth, defaultHeight, aspectRatioPreserved, i
 
   if (aspectRatioPreserved) {
     if (inputWidth && inputHeight) {
-      let inputAspectRatio = inputWidth / inputHeight;
       if (aspectRatio > 1) {
           height = inputHeight;
-          width = timesAspectRatio(inputHeight);
+          width = timesAspectRatio(inputHeight, aspectRatio);
       } else if (aspectRatio < 1) {
-        height = timesAspectRatio(inputWidth);
+        height = timesAspectRatio(inputWidth, aspectRatio);
         width = inputWidth;
       } else if (aspectRatio === 1) {
         if (inputHeight < inputWidth){
           height = inputHeight;
-          width= timesAspectRatio(inputHeight)
+          width= timesAspectRatio(inputHeight, aspectRatio)
         } else {
           width = inputWidth
-          height = timesAspectRatio(inputWidth)
+          height = timesAspectRatio(inputWidth, aspectRatio)
         }
       }
     } else if (!inputWidth && inputHeight) {
       height = inputHeight;
-      width = timesAspectRatio(inputHeight);
+      width = timesAspectRatio(inputHeight, aspectRatio);
     } else if (!inputHeight && inputWidth) {
-      height = timesAspectRatio(inputWidth);
+      height = timesAspectRatio(inputWidth, aspectRatio);
       width = inputWidth;
     } else {
       if (width > height) {
         if (width > defaultWidth) {
-          height = timesAspectRatio(defaultWidth);
+          height = timesAspectRatio(defaultWidth, aspectRatio);
           width = defaultWidth;
         }
       } else {
         if (height > defaultHeight) {
-          width = timesAspectRatio(defaultHeight);
+          width = timesAspectRatio(defaultHeight, aspectRatio);
           height = defaultHeight;
         }
       }
