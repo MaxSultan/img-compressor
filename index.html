@@ -45,28 +45,22 @@
                 <option value="0.9">90%</option>
                 <option value="1.0">100%</option>
             </select>
+            <fieldset>
+                <p>Maximum Dimensions: </p>
+                <label for="js-height">H: <input name="js-height" type="number" step="1" min="-1"></label>
+                x
+                <label for="js-width">W: <input name="js-width" type="number" step="1" min="-1"></label>
+                <label for="js-aspect-ratio">
+                    <input name="js-aspect-ratio" type="checkbox" checked> Preserve Aspect Ratio</label>
+            </fieldset>
 
-            <formfield>
-                <label for="image-dimension">Select Dimension:</label>
-                <label for="js-dimensions">
-                    <input type="radio" value="height" name="js-dimensions" onclick="handleRadioClick(this)"/>
-                    Height
-                </label>
-                <label for="js-dimensions">
-                    <input type="radio" value="width" name="js-dimensions" onclick="handleRadioClick(this)"/>
-                    Width
-                </label>
-                <label for="js-dimension-pixels">Dimension in Pixels: </label>
-                <input name="js-dimension-pixels" type="number" />
-            </formfield>
-            <formfield>
-                <label for="smoothing-options">Smoothing Options:</label>
-                <select name="smoothing-options">
-                    <option value="">--Please choose an option--</option>
-                    <option value="bi-linear">Bi-linear Smoothing</option>
-                    <option value="bi-cubic">Bi-Cubic Smoothing</option>
-                </select>
-            </formfield>
+            <label for="smoothing-options">Smoothing Options:</label>
+            <select name="smoothing-options">
+                <option value="">--Please choose an option--</option>
+                <option value="bi-linear">Bi-linear Smoothing</option>
+                <option value="bi-cubic">Bi-Cubic Smoothing</option>
+            </select>
+
         </form>
 
         <div class="js-images-container"></div>
