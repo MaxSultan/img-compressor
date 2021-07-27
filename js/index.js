@@ -58,19 +58,7 @@ const calculateSize = (img, defaultWidth, defaultHeight, aspectRatioPreserved, i
     } else if (!inputHeight && inputWidth) {
       height = timesAspectRatio(inputWidth, aspectRatio);
       width = inputWidth;
-    } else {
-      if (width > height) {
-        if (width > defaultWidth) {
-          height = timesAspectRatio(defaultWidth, aspectRatio);
-          width = defaultWidth;
-        }
-      } else {
-        if (height > defaultHeight) {
-          width = timesAspectRatio(defaultHeight, aspectRatio);
-          height = defaultHeight;
-        }
-      }
-    }
+    } 
   } else {
     if (inputWidth && inputHeight) {
       height = inputHeight;
