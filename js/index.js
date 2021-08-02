@@ -82,9 +82,20 @@ const displayDownloadLink = (linkText, blobData, parentElement) => {
   var downloadLink = document.createElement("a");
   downloadLink.innerText = linkText;
   let url = URL.createObjectURL(blobData);
+  let reader = new FileReader();
+  reader.onload = () => {
+    let copybutton = document.createElement("button");
+    copybutton.innerText = "Copy Data URL";
+    copybutton.onclick = () => {
+      navigator.clipboard.writeText(reader.result)
+      // TODO: UI should reflect a successful or failed copy
+    }
+    parentElement.append(copybutton);
+  }
+  reader.readAsDataURL(blobData)
   downloadLink.href = url;
   downloadLink.download = url;
-  parentElement.append(downloadLink)
+  parentElement.append(downloadLink);
 }
 
 const readableBytes = (bytes) => {
