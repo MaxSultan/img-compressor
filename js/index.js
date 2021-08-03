@@ -3,8 +3,6 @@ const $ = (sel, el) => {
 }
 
 const MIME_TYPE = "image/jpeg";
-const DEFAULT_WIDTH = 320;
-const DEFAULT_HEIGHT = 180;
 let quality = parseFloat($('select[name="image-quality"]').value, 10);
 let smoothingOptions;
 let inputHeight;
@@ -29,7 +27,7 @@ const timesAspectRatio = (dimension, aspectRatio) => {
   return Math.round(dimension * aspectRatio)
 }
 
-const calculateSize = (img, defaultWidth, defaultHeight, aspectRatioPreserved, inputWidth, inputHeight) => {
+const calculateSize = (img, aspectRatioPreserved, inputWidth, inputHeight) => {
 
   let width = img.width;
   let height = img.height;
@@ -38,15 +36,15 @@ const calculateSize = (img, defaultWidth, defaultHeight, aspectRatioPreserved, i
   if (aspectRatioPreserved) {
     if (inputWidth && inputHeight) {
       if (aspectRatio > 1) {
-          height = inputHeight;
-          width = timesAspectRatio(inputHeight, aspectRatio);
+        height = inputHeight;
+        width = timesAspectRatio(inputHeight, aspectRatio);
       } else if (aspectRatio < 1) {
         height = timesAspectRatio(inputWidth, aspectRatio);
         width = inputWidth;
       } else if (aspectRatio === 1) {
-        if (inputHeight < inputWidth){
+        if (inputHeight < inputWidth) {
           height = inputHeight;
-          width= timesAspectRatio(inputHeight, aspectRatio)
+          width = timesAspectRatio(inputHeight, aspectRatio)
         } else {
           width = inputWidth
           height = timesAspectRatio(inputWidth, aspectRatio)
@@ -58,7 +56,7 @@ const calculateSize = (img, defaultWidth, defaultHeight, aspectRatioPreserved, i
     } else if (!inputHeight && inputWidth) {
       height = timesAspectRatio(inputWidth, aspectRatio);
       width = inputWidth;
-    } 
+    }
   } else {
     if (inputWidth && inputHeight) {
       height = inputHeight;
@@ -78,21 +76,40 @@ const displayInfo = (label, file, parentElement) => {
   parentElement.append(p);
 }
 
+const blobToDataUrl = (blobData) => {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
+    }
+    reader.onerror = (e) => {
+      reject(e);
+    }
+    reader.readAsDataURL(blobData)
+  });
+}
+
 const displayDownloadLink = (linkText, blobData, parentElement) => {
   var downloadLink = document.createElement("a");
   downloadLink.innerText = linkText;
   let url = URL.createObjectURL(blobData);
-  let reader = new FileReader();
-  reader.onload = () => {
-    let copybutton = document.createElement("button");
-    copybutton.innerText = "Copy Data URL";
-    copybutton.onclick = () => {
-      navigator.clipboard.writeText(reader.result)
-      // TODO: UI should reflect a successful or failed copy
-    }
-    parentElement.append(copybutton);
+  let copybutton = document.createElement("button");
+  copybutton.innerText = "Copy Data URL";
+  let dataUrl;
+  blobToDataUrl(blobData)
+    .then(result => {
+      dataUrl = result;
+    })
+    .catch(error => {
+      alert("There was an error converting to Data Url")
+      console.log(error);
+    });
+  copybutton.onclick = () => {
+      navigator.clipboard.writeText(dataUrl)
+    // TODO: UI should reflect a successful or failed copy
   }
-  reader.readAsDataURL(blobData)
+  parentElement.append(copybutton);
+
   downloadLink.href = url;
   downloadLink.download = url;
   parentElement.append(downloadLink);
@@ -118,7 +135,7 @@ const toggleElement = (element) => {
   }
 }
 
-const insertImageDiv = () => {
+const createImageDiv = () => {
   let currentDiv = document.createElement("div");
   $(".js-images-container").append(currentDiv);
   return currentDiv;
@@ -172,7 +189,7 @@ input.onchange = (event) => {
 
   img.onload = () => {
     URL.revokeObjectURL(this.src);
-    const [newWidth, newHeight] = calculateSize(img, DEFAULT_WIDTH, DEFAULT_HEIGHT, aspectRatioPreserved, inputWidth, inputHeight);
+    const [newWidth, newHeight] = calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight);
     const canvas = document.createElement("canvas");
     canvas.width = newWidth;
     canvas.height = newHeight;
@@ -194,7 +211,7 @@ input.onchange = (event) => {
     canvas.toBlob(
       (blob) => {
         // Handle the compressed images. upload or save in local state
-        let element = insertImageDiv();
+        let element = createImageDiv();
         element.append(canvas);
         displayInfo("Original file", file, element);
         displayInfo("Compressed file", blob, element);
