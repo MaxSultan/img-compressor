@@ -9,14 +9,10 @@ let inputHeight;
 let inputWidth;
 let aspectRatioPreserved = true;
 
+const root = $('div[class="js-root"]');
 const input = $('input[name="img-input"]');
-const qualitySelector = $('select[name="image-quality"]');
 const settingsButton = $('button[name="js-settings-button"]');
 const settingsForm = $('form[class="js-settings-form"]');
-const widthInput = $('input[name="js-width"]');
-const heightInput = $('input[name="js-height"]')
-const aspectRatioSelector = $('input[name="js-aspect-ratio"]');
-const smoothingSelector = $('select[name="smoothing-options"]');
 
 // TODO: add form elements and data fields to an object 
 const settingFormObject = {
@@ -28,7 +24,6 @@ const timesAspectRatio = (dimension, aspectRatio) => {
 }
 
 const calculateSize = (img, aspectRatioPreserved, inputWidth, inputHeight) => {
-
   let width = img.width;
   let height = img.height;
   let aspectRatio = width / height;
@@ -105,7 +100,7 @@ const displayDownloadLink = (linkText, blobData, parentElement) => {
       console.log(error);
     });
   copybutton.onclick = () => {
-      navigator.clipboard.writeText(dataUrl)
+    navigator.clipboard.writeText(dataUrl)
     // TODO: UI should reflect a successful or failed copy
   }
   parentElement.append(copybutton);
@@ -142,37 +137,46 @@ const createImageDiv = () => {
 }
 
 /* Settings Events */
-settingsButton.onclick = () => {
-  toggleElement(settingsForm)
-  if (settingsButton.innerText === "Show Settings") {
-    settingsButton.innerText = "Hide Settings"
-  } else if (settingsButton.innerText === "Hide Settings") {
-    settingsButton.innerText = "Show Settings"
-  }
+const listen = (sel, event) => {
+  // only ever addEventListener to 'body' or 'form' and then check ev.target
+  document.body.addEventListener(event, (ev) => {
+    if (!ev.target.matches(sel)) {
+      return true;
+    }
+    else if (sel === 'button[name="js-settings-button"]' && event === 'click') {
+      toggleElement(settingsForm)
+      if (settingsButton.innerText === "Show Settings") {
+        settingsButton.innerText = "Hide Settings"
+      } else if (settingsButton.innerText === "Hide Settings") {
+        settingsButton.innerText = "Show Settings"
+      }
+    }
+    else if (sel === 'select[name="image-quality"]' && event === 'change') {
+      ev.preventDefault();
+      quality = parseFloat(ev.target.value, 10);
+    }
+    else if (sel === 'select[name="smoothing-options"]' && event === 'change') {
+      ev.preventDefault();
+      smoothingOptions = ev.target.value;
+    } 
+    else if (sel === 'input[name="js-aspect-ratio"]' && event === 'change') {
+      if ($('input[name="js-aspect-ratio"]').checked) aspectRatioPreserved = true;
+      else aspectRatioPreserved = false;
+    } 
+    else if (sel === 'input[name="js-height"]' && event === 'change'){
+      inputHeight = parseFloat(ev.target.value, 10);
+    } 
+    else if (sel === 'input[name="js-width"]' && event === 'change'){
+      inputWidth = parseFloat(ev.target.value, 10);
+    }
+  });
 }
-
-qualitySelector.onchange = (event) => {
-  event.preventDefault();
-  quality = parseFloat(event.target.value, 10);
-}
-
-smoothingSelector.onchange = (event) => {
-  event.preventDefault();
-  smoothingOptions = event.target.value;
-}
-
-aspectRatioSelector.onchange = () => {
-  if (this.checked) aspectRatioPreserved = true;
-  else aspectRatioPreserved = false;
-}
-
-heightInput.onchange = (event) => {
-  inputHeight = parseFloat(event.target.value, 10);
-}
-
-widthInput.onchange = (event) => {
-  inputWidth = parseFloat(event.target.value, 10);
-}
+listen('button[name="js-settings-button"]', 'click');
+listen('select[name="image-quality"]', 'change');
+listen('select[name="smoothing-options"]', 'change');
+listen('input[name="js-aspect-ratio"]', 'change');
+listen('input[name="js-height"]', 'change');
+listen('input[name="js-width"]', 'change');
 /* End of Settings Events */
 
 input.onchange = (event) => {
@@ -224,4 +228,3 @@ input.onchange = (event) => {
     input.value = "";
   };
 };
-
