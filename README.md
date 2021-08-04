@@ -20,6 +20,8 @@ Canvas elements can be used to draw images via javascript. By default it does th
 - As a user, I can see the image file size before and after compression
 - As a user, I can download a compressed version of the image
 - As a user, I can customize the quality of the compressed image
+- As a user, I can customize the dimensions of the image
+- As a user I can chose to perserve or disregard the aspect ratio of the image
 
 Here are some questions I still have:
 How does Bilinear Interpolation/BiCubic Interpolation work in compression instead of expansion? In expanding the image you need more data that you have, but in compression you already have all the data you need.
