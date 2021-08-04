@@ -9,8 +9,6 @@ let inputHeight;
 let inputWidth;
 let aspectRatioPreserved = true;
 
-const root = $('div[class="js-root"]');
-const input = $('input[name="img-input"]');
 const settingsButton = $('button[name="js-settings-button"]');
 const settingsForm = $('form[class="js-settings-form"]');
 
@@ -158,16 +156,65 @@ const listen = (sel, event) => {
     else if (sel === 'select[name="smoothing-options"]' && event === 'change') {
       ev.preventDefault();
       smoothingOptions = ev.target.value;
-    } 
+    }
     else if (sel === 'input[name="js-aspect-ratio"]' && event === 'change') {
       if ($('input[name="js-aspect-ratio"]').checked) aspectRatioPreserved = true;
       else aspectRatioPreserved = false;
-    } 
-    else if (sel === 'input[name="js-height"]' && event === 'change'){
+    }
+    else if (sel === 'input[name="js-height"]' && event === 'change') {
       inputHeight = parseFloat(ev.target.value, 10);
-    } 
-    else if (sel === 'input[name="js-width"]' && event === 'change'){
+    }
+    else if (sel === 'input[name="js-width"]' && event === 'change') {
       inputWidth = parseFloat(ev.target.value, 10);
+    }
+    else if (sel === 'input[name="img-input"]' && event === 'change') {
+      const file = ev.target.files[0]; // get the file
+      const blobURL = URL.createObjectURL(file);
+      const img = new Image();
+      img.src = blobURL;
+
+      img.onerror = () => {
+        URL.revokeObjectURL(this.src);
+        // TODO: Handle the failure properly
+        alert("Cannot load image");
+      };
+
+      img.onload = () => {
+        URL.revokeObjectURL(this.src);
+        const [newWidth, newHeight] = calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight);
+        const canvas = document.createElement("canvas");
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        const context = canvas.getContext("2d");
+        const canvas2 = document.createElement("canvas");
+        const context2 = canvas2.getContext("2d")
+        canvas2.height = newHeight * 0.5;
+        canvas2.width = newWidth * 0.5;
+
+        if (smoothingOptions === 'bi-linear') {
+          context.drawImage(img, 0, 0, newWidth, newHeight);
+        } else {
+          // faux bi-cubic image smoothing 
+          context2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
+          context2.drawImage(img, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5);
+          context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, canvas.width, canvas.height);
+        }
+        canvas.toBlob(
+          (blob) => {
+            // Handle the compressed images. upload or save in local state
+            let element = createImageDiv();
+            element.append(canvas);
+            displayInfo("Original file", file, element);
+            displayInfo("Compressed file", blob, element);
+            displayDownloadLink("Download Minified Image", blob, element);
+            insertBreak(element);
+          },
+          MIME_TYPE,
+          quality
+        );
+        $('input[name="img-input"]').value = "";
+      };
     }
   });
 }
@@ -179,52 +226,4 @@ listen('input[name="js-height"]', 'change');
 listen('input[name="js-width"]', 'change');
 /* End of Settings Events */
 
-input.onchange = (event) => {
-  const file = event.target.files[0]; // get the file
-  const blobURL = URL.createObjectURL(file);
-  const img = new Image();
-  img.src = blobURL;
-
-  img.onerror = () => {
-    URL.revokeObjectURL(this.src);
-    // TODO: Handle the failure properly
-    alert("Cannot load image");
-  };
-
-  img.onload = () => {
-    URL.revokeObjectURL(this.src);
-    const [newWidth, newHeight] = calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight);
-    const canvas = document.createElement("canvas");
-    canvas.width = newWidth;
-    canvas.height = newHeight;
-
-    const context = canvas.getContext("2d");
-    const canvas2 = document.createElement("canvas");
-    const context2 = canvas2.getContext("2d")
-    canvas2.height = newHeight * 0.5;
-    canvas2.width = newWidth * 0.5;
-
-    if (smoothingOptions === 'bi-linear') {
-      context.drawImage(img, 0, 0, newWidth, newHeight);
-    } else {
-      // faux bi-cubic image smoothing 
-      context2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
-      context2.drawImage(img, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5);
-      context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, canvas.width, canvas.height);
-    }
-    canvas.toBlob(
-      (blob) => {
-        // Handle the compressed images. upload or save in local state
-        let element = createImageDiv();
-        element.append(canvas);
-        displayInfo("Original file", file, element);
-        displayInfo("Compressed file", blob, element);
-        displayDownloadLink("Download Minified Image", blob, element);
-        insertBreak(element);
-      },
-      MIME_TYPE,
-      quality
-    );
-    input.value = "";
-  };
-};
+listen('input[name="img-input"]', 'change');
