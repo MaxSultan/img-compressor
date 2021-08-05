@@ -1,6 +1,8 @@
 # img-compressor
+
 ## Visual Preview:
-![Screen Shot 2021-08-03 at 10 07 32 AM](https://user-images.githubusercontent.com/59545347/128049202-fdd104d8-d855-4319-baec-8beb14d7b6e7.png)
+
+<a href="https://maxsultan.github.io/img-compressor/"><kbd><img src="https://user-images.githubusercontent.com/59545347/128049202-fdd104d8-d855-4319-baec-8beb14d7b6e7.png" /></kbd></a>
 
 ## This can be previewed here:  
 https://maxsultan.github.io/img-compressor/
