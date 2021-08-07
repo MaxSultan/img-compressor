@@ -229,9 +229,9 @@ listen('input[name="img-input"]', 'change');
 
 window.addEventListener("paste", (e) => {
   var item = Array.from(e.clipboardData.items).find(x => /^image\//.test(x.type));
-  try{
+  try {
     var file = item.getAsFile();
-  }  catch{
+  } catch {
     alert('This is not an image element')
     return;
   }
@@ -261,6 +261,7 @@ window.addEventListener("paste", (e) => {
       context.drawImage(img, 0, 0, newWidth, newHeight);
     } else {
       // faux bi-cubic image smoothing 
+      // TODO: fix this
       context2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
       context2.drawImage(img, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5);
       context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, canvas.width, canvas.height);
