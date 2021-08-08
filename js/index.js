@@ -1,21 +1,54 @@
+class SettingsForm {
+  constructor() {
+      if (!SettingsForm._instance) {
+          SettingsForm._instance = this;
+      }
+      this.quality = parseFloat(document.body.querySelector('select[name="image-quality"]').value, 10);
+      this.smoothingOptions = "bi-linear";
+      this.inputHeight = 0;
+      this.inputWidth = 0;
+      this.aspectRatioPreserved = true;
+      this.settingsShown = false;
+
+      return SettingsForm._instance;
+  }
+
+  /* Setters */
+  setQuality(newQuality) {
+      this.quality = newQuality;
+  }
+
+  setSmoothing(newSmoothing) {
+      this.smoothingOptions = newSmoothing;
+  }
+
+  setInputHeight(newInputHeight) {
+      this.inputHeight = newInputHeight;
+  }
+
+  setInputWidth(newInputWidth) {
+      this.inputWidth = newInputWidth;
+  }
+
+  setAspectRatioPreserved(newBoolean) {
+      this.aspectRatioPreserved = newBoolean;
+  }
+
+  static getInstance() {
+      return this._instance;
+  }
+
+}
+
 const $ = (sel, el) => {
   return (el || document.body).querySelector(sel);
 }
 
 const MIME_TYPE = "image/jpeg";
-let quality = parseFloat($('select[name="image-quality"]').value, 10);
-let smoothingOptions = "bi-linear";
-let inputHeight;
-let inputWidth;
-let aspectRatioPreserved = true;
+let settingsFormData = new SettingsForm();
 
 const settingsButton = $('button[name="js-settings-button"]');
 const settingsForm = $('form[class="js-settings-form"]');
-
-// TODO: add form elements and data fields to an object 
-const settingFormObject = {
-
-}
 
 const calculateSize = (img, aspectRatioPreserved, inputWidth, inputHeight) => {
   let width = img.width;
@@ -150,21 +183,21 @@ const listen = (sel, event) => {
     }
     if (sel === 'select[name="image-quality"]' && event === 'change') {
       ev.preventDefault();
-      quality = parseFloat(ev.target.value, 10);
+      settingsFormData.setQuality(parseFloat(ev.target.value, 10));
     }
     if (sel === 'select[name="smoothing-options"]' && event === 'change') {
       ev.preventDefault();
-      smoothingOptions = ev.target.value;
+      settingsFormData.setSmoothing(ev.target.value);
     }
     if (sel === 'input[name="js-aspect-ratio"]' && event === 'change') {
-      if ($('input[name="js-aspect-ratio"]').checked) aspectRatioPreserved = true;
-      else aspectRatioPreserved = false;
+      if ($('input[name="js-aspect-ratio"]').checked) settingsFormData.setAspectRatioPreserved(true);
+      else settingsFormData.setAspectRatioPreserved(false);
     }
     if (sel === 'input[name="js-height"]' && event === 'change') {
-      inputHeight = parseFloat(ev.target.value, 10);
+      settingsFormData.setInputHeight(parseFloat(ev.target.value, 10));
     }
     if (sel === 'input[name="js-width"]' && event === 'change') {
-      inputWidth = parseFloat(ev.target.value, 10);
+      settingsFormData.setInputWidth(parseFloat(ev.target.value, 10));
     }
     if (sel === 'input[name="img-input"]' && event === 'change') {
       const file = ev.target.files[0]; // get the file
@@ -180,7 +213,7 @@ const listen = (sel, event) => {
 
       img.onload = () => {
         URL.revokeObjectURL(this.src);
-        const [newWidth, newHeight] = calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight);
+        const [newWidth, newHeight] = calculateSize(img, settingsFormData.aspectRatioPreserved, settingsFormData.inputWidth, settingsFormData.inputHeight);
         const canvas = document.createElement("canvas");
         canvas.width = newWidth;
         canvas.height = newHeight;
@@ -191,7 +224,7 @@ const listen = (sel, event) => {
         canvas2.height = newHeight * 0.5;
         canvas2.width = newWidth * 0.5;
 
-        if (smoothingOptions === 'bi-linear') {
+        if (settingsFormData.smoothingOptions === 'bi-linear') {
           context.drawImage(img, 0, 0, newWidth, newHeight);
         } else {
           // faux bi-cubic image smoothing 
@@ -210,7 +243,7 @@ const listen = (sel, event) => {
             insertBreak(element);
           },
           MIME_TYPE,
-          quality
+          settingsFormData.quality
         );
         $('input[name="img-input"]').value = "";
       };
@@ -246,7 +279,7 @@ window.addEventListener("paste", (e) => {
 
   img.onload = () => {
     URL.revokeObjectURL(this.src);
-    const [newWidth, newHeight] = calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight);
+    const [newWidth, newHeight] = calculateSize(img, settingsFormData.aspectRatioPreserved, settingsFormData.inputWidth, settingsFormData.inputHeight);
     const canvas = document.createElement("canvas");
     canvas.width = newWidth;
     canvas.height = newHeight;
@@ -257,7 +290,7 @@ window.addEventListener("paste", (e) => {
     canvas2.height = newHeight * 0.5;
     canvas2.width = newWidth * 0.5;
 
-    if (smoothingOptions === 'bi-linear') {
+    if (settingsFormData.smoothingOptions === 'bi-linear') {
       context.drawImage(img, 0, 0, newWidth, newHeight);
     } else {
       // faux bi-cubic image smoothing 
@@ -277,7 +310,7 @@ window.addEventListener("paste", (e) => {
         insertBreak(element);
       },
       MIME_TYPE,
-      quality
+      settingsFormData.quality
     );
     $('input[name="img-input"]').value = "";
   };
