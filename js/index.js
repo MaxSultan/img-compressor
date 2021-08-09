@@ -12,12 +12,7 @@ let file;
 
 const settingsButton = $('button[name="js-settings-button"]');
 const settingsForm = $('form[class="js-settings-form"]');
-var $form = $('form[name="js-box"]');
-
-// TODO: add form elements and data fields to an object 
-const settingFormObject = {
-
-}
+const dragAndDropForm = $('form[name="js-box"]');
 
 const calculateSize = (img, aspectRatioPreserved, inputWidth, inputHeight) => {
   let width = img.width;
@@ -187,7 +182,6 @@ const renderMinifiedFile = (file) => {
 
 /* Settings Events */
 const listen = (sel, event) => {
-  // only ever addEventListener to 'body' or 'form' and then check ev.target
   document.body.addEventListener(event, (ev) => {
     if (!ev.target.matches(sel)) {
       return true;
@@ -222,21 +216,22 @@ const listen = (sel, event) => {
       file = ev.target.files[0]; // get the file
       renderMinifiedFile(file);
     }
-    // let the children of the div propigate the event up to the div 
-    // There is a bug where the drag and drop box turns white when the item crosses the label. 
-    // My assumption is that there is no drag and drop events on labels 
-    // we need to let the event bubble up/propigate to the div
 
-    if (['form[name="js-box"]', 'div[name="js-box-input"]', 'input[name="js-box-file"]', 'button[name="js-box-button"]'].includes(sel)) {
+    // There is a bug where the drag and drop box turns white when the item crosses the label and expected drop to upload does not happen
+    // My assumption is that there is no drag and drop events on labels 
+    // we need to let the event bubble up/propigate to the div/form
+
+    if (['form[name="js-box"]', 'div[name="js-box-input"]', 'input[name="js-box-file"]'].includes(sel)) {
+      // debugger;
       if (['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].includes(event)) {
         ev.preventDefault();
         ev.stopPropagation();
       }
       if (['dragover', 'dragenter'].includes(event)) {
-        $form.classList.add('is-dragover');
+        dragAndDropForm.classList.add('is-dragover');
       }
       if (['dragleave', 'dragend', 'drop'].includes(event)) {
-        $form.classList.remove('is-dragover');
+        dragAndDropForm.classList.remove('is-dragover');
       }
       if (event === 'drop') {
         file = ev.dataTransfer.files[0];
@@ -258,15 +253,11 @@ listen('input[name="js-box-file"]', 'change');
   'form[name="js-box"]',
   'div[name="js-box-input"]',
   'input[name="js-box-file"]',
-  'button[name="js-box-button"]',
-  'label[name="js-box-label"]',
-  'span[name="js-box-dragndrop"]'
 ].forEach(formItem => {
   ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach(event => {
     listen(formItem, event);
   })
 })
-
 
 window.addEventListener("paste", (e) => {
   var item = Array.from(e.clipboardData.items).find(x => /^image\//.test(x.type));

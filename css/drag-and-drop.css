@@ -1,20 +1,13 @@
-/* .css-box-dragndrop, */
-.css-box-uploading,
-.css-box-success,
-.css-box-error {
-  display: none;
-}
-
 .css-box {
-    background-color: white;
-    outline: 2px dashed black;
-    outline-offset: -10px;
+  background-color: white;
+  outline: 2px dashed black;
+  outline-offset: -10px;
 }
   
-.css-box.has-advanced-upload .css-box-dragndrop {
-    display: inline;
+.css-box .css-box-dragndrop {
+  display: inline;
 }
 
 .css-box.is-dragover {
-    background-color: grey;
+  background-color: grey;
 }

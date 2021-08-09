@@ -31,17 +31,12 @@
         <h1>Upload an image and see the result</h1>
         <form class="css-box" name="js-box" method="post" action="" enctype="multipart/form-data">
             <div class="css-box-input" name="js-box-input">
-                <input class="css-box-file" name="js-box-file" type="file" name="files[]"
-                    data-multiple-caption="{count} files selected" multiple />
-                <label for="js-box-file" name="js-box-file-label"><strong>Choose a file</strong><span
-                        class="css-box-dragndrop" name="js-box-dragndrop"> or drag it
-                        here</span>.</label>
+                <input class="css-box-file" name="js-box-file" type="file" name="file" />
+                <label for="js-box-file" name="js-box-file-label"><strong>Choose a file</strong>
+                    <span class="css-box-dragndrop" name="js-box-dragndrop"> or drag it here</span>.
+                </label>
             </div>
-            <div class="css-box-uploading">Uploading…</div>
-            <div class="css-box-success">Done!</div>
-            <div class="css-box-error">Error! <span></span>.</div>
         </form>
-        <!-- <input name="img-input" type="file" accept="image/*" style="display:block" />s -->
         <button name="js-settings-button">Show Settings</button>
         <form class="js-settings-form" style="display: none">
             <label for="image-quality">Image Quality:</label>
@@ -66,16 +61,13 @@
                 <label for="js-aspect-ratio">
                     <input name="js-aspect-ratio" type="checkbox" checked> Preserve Aspect Ratio</label>
             </fieldset>
-
             <label for="smoothing-options">Smoothing Options:</label>
             <select name="smoothing-options">
                 <option value="">--Please choose an option--</option>
                 <option value="bi-linear" selected>Bi-linear Smoothing</option>
                 <option value="bi-cubic">Bi-Cubic Smoothing</option>
             </select>
-
         </form>
-
         <div class="js-images-container"></div>
     </div>
     <script src="js/index.js"></script>
