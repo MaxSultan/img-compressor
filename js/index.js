@@ -225,7 +225,7 @@ const listen = (sel, event) => {
       // debugger;
       if (['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].includes(event)) {
         ev.preventDefault();
-        ev.stopPropagation();
+        // ev.stopPropagation();
       }
       if (['dragover', 'dragenter'].includes(event)) {
         dragAndDropForm.classList.add('is-dragover');
