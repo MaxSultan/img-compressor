@@ -19,3 +19,8 @@ fieldset label {
 button:active {
     filter: brightness(85%);
 }
+.css-flex-container{
+    display:flex;
+    justify-content: space-between;
+    max-width: 50vw;
+}
