@@ -29,13 +29,19 @@
 <body>
     <div class="js-root">
         <h1>Upload an image and see the result</h1>
-        <form class="css-box" name="js-box" method="post" action="" enctype="multipart/form-data">
-            <div class="css-box-input" name="js-box-input">
-                <label for="js-box-file" name="js-box-file-label">Choose a file or drag it here.
-                    <input class="css-box-file" name="js-box-file" type="file" name="file" />
-                </label>
-            </div>
-        </form>
+        <div class="css-flex-container">
+            <form class="css-box" name="js-box" method="post" action="" enctype="multipart/form-data">
+                <div class="css-box-input" name="js-box-input">
+                    <label for="js-box-file" name="js-box-file-label">Choose a file or drag it here.
+                        <input class="css-box-file" name="js-box-file" type="file" name="file" />
+                    </label>
+                </div>
+            </form>
+            <h1>OR</h1>
+            <label>Paste an Image or Image URL:
+                <input type="url" ... />
+            </label>
+        </div>
         <button name="js-settings-button">Show Settings</button>
         <form class="js-settings-form" style="display: none">
             <label for="image-quality">Image Quality:
