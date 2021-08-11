@@ -38,20 +38,21 @@
         </form>
         <button name="js-settings-button">Show Settings</button>
         <form class="js-settings-form" style="display: none">
-            <label for="image-quality">Image Quality:</label>
-            <select name="image-quality">
-                <option value="">--Please choose an option--</option>
-                <option value="0.1">10%</option>
-                <option value="0.2">20%</option>
-                <option value="0.3">30%</option>
-                <option value="0.4">40%</option>
-                <option value="0.5">50%</option>
-                <option value="0.6">60%</option>
-                <option value="0.7" selected>70%</option>
-                <option value="0.8">80%</option>
-                <option value="0.9">90%</option>
-                <option value="1.0">100%</option>
-            </select>
+            <label for="image-quality">Image Quality:
+                <select name="image-quality">
+                    <option value="">--Please choose an option--</option>
+                    <option value="0.1">10%</option>
+                    <option value="0.2">20%</option>
+                    <option value="0.3">30%</option>
+                    <option value="0.4">40%</option>
+                    <option value="0.5">50%</option>
+                    <option value="0.6">60%</option>
+                    <option value="0.7" selected>70%</option>
+                    <option value="0.8">80%</option>
+                    <option value="0.9">90%</option>
+                    <option value="1.0">100%</option>
+                </select>
+            </label>
             <fieldset>
                 <p>Maximum Dimensions: </p>
                 <label for="js-height">H: <input name="js-height" type="number" step="1" min="-1"></label>
@@ -60,12 +61,13 @@
                 <label for="js-aspect-ratio">
                     <input name="js-aspect-ratio" type="checkbox" checked> Preserve Aspect Ratio</label>
             </fieldset>
-            <label for="smoothing-options">Smoothing Options:</label>
-            <select name="smoothing-options">
-                <option value="">--Please choose an option--</option>
-                <option value="bi-linear" selected>Bi-linear Smoothing</option>
-                <option value="bi-cubic">Bi-Cubic Smoothing</option>
-            </select>
+            <label for="smoothing-options">Smoothing Options:
+                <select name="smoothing-options">
+                    <option value="">--Please choose an option--</option>
+                    <option value="bi-linear" selected>Bi-linear Smoothing</option>
+                    <option value="bi-cubic">Bi-Cubic Smoothing</option>
+                </select>
+            </label>
         </form>
         <div class="js-images-container"></div>
     </div>

@@ -1,4 +1,3 @@
-/* Settings Events */
 const listen = (sel, event) => {
     document.body.addEventListener(event, (ev) => {
       if (!ev.target.matches(sel)) {
@@ -39,7 +38,7 @@ const listen = (sel, event) => {
       // My assumption is that there is no drag and drop events on labels 
       // we need to let the event bubble up/propigate to the div/form
   
-      if (['form[name="js-box"]', 'div[name="js-box-input"]', 'input[name="js-box-file"]'].includes(sel)) {
+      if (['form[name="js-box"]', 'div[name="js-box-input"]', 'input[name="js-box-file"]', 'label[name="js-box-file-label"]'].includes(sel)) {
         // debugger;
         if (['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].includes(event)) {
           ev.preventDefault();
@@ -64,13 +63,14 @@ const listen = (sel, event) => {
   listen('input[name="js-aspect-ratio"]', 'change');
   listen('input[name="js-height"]', 'change');
   listen('input[name="js-width"]', 'change');
-  /* End of Settings Events */
+  listen('label[name="js-box-file-label"]',)
   
   listen('input[name="js-box-file"]', 'change');
   [
     'form[name="js-box"]',
     'div[name="js-box-input"]',
     'input[name="js-box-file"]',
+    'label[name="js-box-file-label"]'
   ].forEach(formItem => {
     ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach(event => {
       listen(formItem, event);
