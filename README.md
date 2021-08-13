@@ -1,4 +1,5 @@
 # img-compressor
+Minify images using lossy compression
 
 ## Visual Preview:
 
@@ -8,7 +9,7 @@
 https://maxsultan.github.io/img-compressor/
 
 ## How it Works:
-Canvas elements can be used to draw images via javascript. By default it does this using bilinear interpolation. The canvas element has been updated to use a faux bi-cubic interpolation.  
+Canvas elements can be used to draw images via javascript. By default it does this using bilinear interpolation.
 
 ### Here are some basic definitions: 
 - Bilinear Interpolation uses a weighted average of the four nearest cell centers. The closer an input cell center is to the output cell center, the higher the influence of its value is on the output cell value. This means that the output value could be different than the nearest input, but is always within the same range of values as the input.
