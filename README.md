@@ -1,5 +1,5 @@
 # img-compressor
-Minify images using lossy compression
+Minify and resize images using lossy compression all on the front-end
 
 ## Visual Preview:
 
