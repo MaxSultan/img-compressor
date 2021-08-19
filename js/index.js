@@ -130,6 +130,19 @@ const createImageDiv = () => {
   return currentDiv;
 }
 
+const renderImageData = ({blob, canvas}) => {
+    let div = createImageDiv();
+    div.append(canvas);
+    displayInfo("Original file", file, div);
+    displayInfo("Compressed file", blob, div);
+    displayDownloadLink("Download Minified Image", blob, div);
+    clearInputs()
+}
+
+const clearInputs = () => {
+  $('input[name="js-box-file"]').value = "";
+}
+
 // const renderMinifiedFile = (file) => {
 //   var img = new Image();
 

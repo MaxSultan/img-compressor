@@ -84,12 +84,12 @@ function resize(file, { aspectRatioPreserved = true, inputWidth, inputHeight, sm
         let img = new Image();
 
 
-        img.onerror = () => {
+        img.onerror = function(){
             URL.revokeObjectURL(this.src);
-            throw Error("Cannot load Image");
+            reject(Error("Cannot load Image"));
         };
 
-        img.onload = () => {
+        img.onload = function(){
             // URL.revokeObjectURL(this.src);
             const [newWidth, newHeight] = calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight);
             ret.canvas = document.createElement("canvas");
@@ -118,7 +118,8 @@ function resize(file, { aspectRatioPreserved = true, inputWidth, inputHeight, sm
                     ret.blob = blob;
                     blobToDataUrl(blob).then((dataURL) => {
                         ret.dataUrl = dataURL
-                    }).catch(() => { throw Error("could not convert to blob") });
+                        resolve(ret)
+                    }).catch(() => {  reject(Error("could not convert to blob")) });
                 },
                 MIME_TYPE,
                 quality
@@ -126,14 +127,11 @@ function resize(file, { aspectRatioPreserved = true, inputWidth, inputHeight, sm
         }
 
         img.src = window.URL.createObjectURL(file);
-
-        resolve(ret)
-        reject(Error("Could not minify image data"))
     })
 }
 
 
-const calculateSize = (img, aspectRatioPreserved, inputWidth, inputHeight) => {
+function calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight){
     let width = img.width;
     let height = img.height;
     let aspectRatio = width / height;
@@ -178,7 +176,7 @@ const calculateSize = (img, aspectRatioPreserved, inputWidth, inputHeight) => {
     return [width, height];
 }
 
-const blobToDataUrl = (blobData) => {
+function blobToDataUrl(blobData){
     return new Promise((resolve, reject) => {
         let reader = new FileReader();
         reader.onload = () => {
