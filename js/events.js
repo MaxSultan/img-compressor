@@ -31,7 +31,29 @@ const listen = (sel, event) => {
     }
     if (sel === 'input[name="js-box-file"]' && event === 'change') {
       file = ev.target.files[0]; // get the file
-      RESIZER.resize(file, aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality)
+      resize(file, {
+        aspectRatioPreserved: aspectRatioPreserved,
+        inputWidth: inputWidth,
+        inputHeight: inputHeight,
+        smoothingOptions: smoothingOptions,
+        quality: quality
+      }).then((data) => {
+
+        // debugger
+        // here data is defined but I cannot access any of the data properties and if I use the debugger it says data is undefined
+        console.log(data)
+        console.log(data.blob)
+        // console.log(blob);
+        // console.log(canvas);
+        // let div = createImageDiv();
+        // div.append(canvas);
+        // displayInfo("Original file", file, div);
+        // displayInfo("Compressed file", blob, div);
+        // displayDownloadLink("Download Minified Image", blob, div);
+      })
+
+      // insertBreak(div);
+      $('input[name="js-box-file"]').value = "";
     }
     if (['form[name="js-box"]', 'div[name="js-box-input"]', 'input[name="js-box-file"]', 'label[name="js-box-file-label"]'].includes(sel)) {
       if (['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].includes(event)) {
@@ -46,7 +68,7 @@ const listen = (sel, event) => {
       }
       if (event === 'drop') {
         file = ev.dataTransfer.files[0];
-        RESIZER.resize(file, aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality)
+        resize(file, { aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality })
       }
     }
   });
@@ -80,5 +102,5 @@ window.addEventListener("paste", (e) => {
     return;
   }
 
-  RESIZER.resize(file, aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality)
+  resize(file, aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality)
 });

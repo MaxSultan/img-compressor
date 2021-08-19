@@ -1,9 +1,20 @@
 /* DOCUMENTATION */
 /* 
-RESIZER is a function that accepts and image and image options and returns an object with several properties 
+RESIZER is a function that accepts an  options object and returns an object with several properties 
 
 inputs: 
+----------------------------------------------------------------------------------------------------------
+example:
 
+resize({ 
+    file: ???, 
+    aspectRatioPreserved: true, 
+    inputWidth: 300, 
+    inputHeight: 300, 
+    smoothingOptions: "bi-linear", 
+    quality: 0.7 
+})
+----------------------------------------------------------------------------------------------------------
 file --  
 an image file (what kind of file formats work/dont work?  jpeg and png work. svg works but can sometimes have odd side efects (alpha layer turned black))
 this should be added to the function as an img url, file, image blob, 
@@ -40,17 +51,17 @@ dataUrl - a url that can be used to access the image from any client
 // How do you write an iife that accepts parameters/args?
 // how do you export a function for use in a package?
 
+// (async function () {
+//     'use strict';
 
-var RESIZER;
-(async function () {
-    'use strict';
+// a function that accepts a file and an options object
+function resize(file, { aspectRatioPreserved = true, inputWidth, inputHeight, smoothingOptions = "bi-linear", quality = 0.7 }) {
+    const ret = {}
+    return new Promise((resolve, reject) => {
 
-    function resize(file, aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality) {
-        let blob;
-        let dataUrl;
 
         // if(file.type.match(/^image\//)) file = 
-        if (file) file.getAsFile();
+        // if (file) file.getAsFile();
 
         // what happens if we call this on a file
 
@@ -59,7 +70,7 @@ var RESIZER;
             uploaded file
             pasted file
             image blob
-    
+     
             How is an image object represented? 
         */
 
@@ -70,25 +81,22 @@ var RESIZER;
         // if usable, is it a file, url, image blob
         // if not throw an error
 
-
-
         let img = new Image();
+
 
         img.onerror = () => {
             URL.revokeObjectURL(this.src);
-            // TODO: Handle the failure properly
-            // alert("Cannot load image");
             throw Error("Cannot load Image");
         };
 
         img.onload = () => {
-            URL.revokeObjectURL(this.src);
+            // URL.revokeObjectURL(this.src);
             const [newWidth, newHeight] = calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight);
-            const canvas = document.createElement("canvas");
-            canvas.width = newWidth;
-            canvas.height = newHeight;
+            ret.canvas = document.createElement("canvas");
+            ret.canvas.width = newWidth;
+            ret.canvas.height = newHeight;
 
-            const context = canvas.getContext("2d");
+            const context = ret.canvas.getContext("2d");
             const canvas2 = document.createElement("canvas");
             const context2 = canvas2.getContext("2d")
             canvas2.height = newHeight * 0.5;
@@ -100,95 +108,98 @@ var RESIZER;
                 // faux bi-cubic image smoothing 
                 context2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
                 context2.drawImage(img, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5);
-                context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, canvas.width, canvas.height);
+                context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, ret.canvas.width, ret.canvas.height);
             }
 
-            canvas.toBlob(
+            ret.canvas.toBlob(
                 (blob) => {
-                    blob = blob;
+                    ret.objUrl = window.URL.createObjectURL(blob);
+
+                    ret.blob = blob;
                     blobToDataUrl(blob).then((dataURL) => {
-                        dataUrl = dataURL
-                    }).catch(() => { throw Error() });
+                        ret.dataUrl = dataURL
+                    }).catch(() => { throw Error("could not convert to blob") });
                 },
                 MIME_TYPE,
                 quality
             );
         }
-        const objUrl = URL.createObjectURL(file);
-        img.src = objUrl;
 
-        return {
-            blob: blob,
-            objUrl: objUrl,
-            dataUrl: dataUrl,
-        }
+        img.src = window.URL.createObjectURL(file);
+
+        resolve(ret)
+        reject(Error("Could not minify image data"))
+    })
+}
+
+
+const calculateSize = (img, aspectRatioPreserved, inputWidth, inputHeight) => {
+    let width = img.width;
+    let height = img.height;
+    let aspectRatio = width / height;
+    const timesAspectRatio = (dimension) => {
+        return Math.round(dimension * aspectRatio)
     }
 
-
-    const calculateSize = (img, aspectRatioPreserved, inputWidth, inputHeight) => {
-        let width = img.width;
-        let height = img.height;
-        let aspectRatio = width / height;
-        const timesAspectRatio = (dimension) => {
-            return Math.round(dimension * aspectRatio)
-        }
-
-        if (aspectRatioPreserved) {
-            if (inputWidth && inputHeight) {
-                if (aspectRatio > 1) {
-                    height = inputHeight;
-                    width = timesAspectRatio(inputHeight);
-                } else if (aspectRatio < 1) {
-                    height = timesAspectRatio(inputWidth);
-                    width = inputWidth;
-                } else if (aspectRatio === 1) {
-                    if (inputHeight < inputWidth) {
-                        height = inputHeight;
-                        width = timesAspectRatio(inputHeight)
-                    } else {
-                        width = inputWidth
-                        height = timesAspectRatio(inputWidth)
-                    }
-                }
-            } else if (!inputWidth && inputHeight) {
+    if (aspectRatioPreserved) {
+        if (inputWidth && inputHeight) {
+            if (aspectRatio > 1) {
                 height = inputHeight;
                 width = timesAspectRatio(inputHeight);
-            } else if (!inputHeight && inputWidth) {
+            } else if (aspectRatio < 1) {
                 height = timesAspectRatio(inputWidth);
                 width = inputWidth;
+            } else if (aspectRatio === 1) {
+                if (inputHeight < inputWidth) {
+                    height = inputHeight;
+                    width = timesAspectRatio(inputHeight)
+                } else {
+                    width = inputWidth
+                    height = timesAspectRatio(inputWidth)
+                }
             }
-        } else {
-            if (inputWidth && inputHeight) {
-                height = inputHeight;
-                width = inputWidth;
-            } else if (!inputWidth && inputHeight) {
-                height = inputHeight;
-            } else if (!inputHeight && inputWidth) {
-                width = inputWidth;
-            }
+        } else if (!inputWidth && inputHeight) {
+            height = inputHeight;
+            width = timesAspectRatio(inputHeight);
+        } else if (!inputHeight && inputWidth) {
+            height = timesAspectRatio(inputWidth);
+            width = inputWidth;
         }
-        return [width, height];
+    } else {
+        if (inputWidth && inputHeight) {
+            height = inputHeight;
+            width = inputWidth;
+        } else if (!inputWidth && inputHeight) {
+            height = inputHeight;
+        } else if (!inputHeight && inputWidth) {
+            width = inputWidth;
+        }
     }
+    return [width, height];
+}
 
-    const blobToDataUrl = (blobData) => {
-        return new Promise((resolve, reject) => {
-            let reader = new FileReader();
-            reader.onload = () => {
-                resolve(reader.result);
-            }
-            reader.onerror = (e) => {
-                reject(e);
-            }
-            reader.readAsDataURL(blobData)
-        });
+const blobToDataUrl = (blobData) => {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = () => {
+            resolve(reader.result);
+        }
+        reader.onerror = (e) => {
+            reject(e);
+        }
+        reader.readAsDataURL(blobData)
+    });
 
-    }
+}
 
-    if ('undefined' === typeof module) {
-        module.exports = RESIZER;
-        // export default RESIZER;
-    }
-}());
+    // if ('undefined' === typeof module) {
+    //     module.exports = {
+    //         resizer: RESIZER.resize,
+    //     }
+
+    //     // export default RESIZER;
+    // }
+// }());
 
 
 
