@@ -39,13 +39,11 @@ const listen = (sel, event) => {
         quality: quality
       }).then(renderImageData)
 
-      // insertBreak(div);
       $('input[name="js-box-file"]').value = "";
     }
     if (['form[name="js-box"]', 'div[name="js-box-input"]', 'input[name="js-box-file"]', 'label[name="js-box-file-label"]'].includes(sel)) {
       if (['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].includes(event)) {
         ev.preventDefault();
-        // ev.stopPropagation();
       }
       if (['dragover', 'dragenter'].includes(event)) {
         dragAndDropForm.classList.add('is-dragover');
