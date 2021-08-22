@@ -31,7 +31,7 @@ const listen = (sel, event) => {
     }
     if (sel === 'input[name="js-box-file"]' && event === 'change') {
       file = ev.target.files[0]; // get the file
-      Mini.resizer(file, {
+      Mini.compressResizeBlobify(file, {
         aspectRatioPreserved: aspectRatioPreserved,
         inputWidth: inputWidth,
         inputHeight: inputHeight,
@@ -54,7 +54,7 @@ const listen = (sel, event) => {
       }
       if (event === 'drop') {
         file = ev.dataTransfer.files[0];
-        Mini.resizer(file, {aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality}).then(renderImageData)
+        Mini.compressResizeBlobify(file, {aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality}).then(renderImageData)
       }
     }
   });
@@ -88,5 +88,5 @@ window.addEventListener("paste", (e) => {
     return;
   }
 
-  Mini.resizer(file, {aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality}).then(renderImageData)
+  Mini.compressResizeBlobify(file, {aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality}).then(renderImageData)
 });

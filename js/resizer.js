@@ -54,7 +54,8 @@ dataUrl - a url that can be used to access the image from any client
 // (async function () {
 //     'use strict';
 
-// a function that accepts a file and an options object
+// TODO: add documentation for all new functions
+
 const Mini = (function () {
 
     function calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight) {
@@ -115,88 +116,98 @@ const Mini = (function () {
         });
     }
 
+    function canvasToBlob(inputElement) {
+        const ret = {};
+        return new Promise((resolve, reject) => {
+            inputElement.toBlob(
+                (blob) => {
+                    ret.objUrl = window.URL.createObjectURL(blob);
+                    ret.blob = blob;
+                    blobToDataUrl(blob).then((dataURL) => {
+                        ret.dataUrl = dataURL
+                        resolve(ret)
+                    }).catch(() => { reject(Error("could not convert to blob")) });
+                },
+                MIME_TYPE,
+                quality
+            );
+        })
+    }
+
+    function resize(file, aspectRatioPreserved, inputWidth, inputHeight) {
+        return new Promise((resolve, reject) => {
+            let img = new Image();
+
+
+            img.onerror = function () {
+                URL.revokeObjectURL(this.src);
+                reject(Error("Cannot load Image"));
+            };
+
+            img.onload = function () {
+                URL.revokeObjectURL(this.src);
+
+                const [newWidth, newHeight] = calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight);
+                const canvas = document.createElement("canvas");
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+
+
+                const canvas2 = document.createElement("canvas");
+
+                canvas2.height = newHeight * 0.5;
+                canvas2.width = newWidth * 0.5;
+
+                resolve({ canvas, canvas2, img, newWidth, newHeight })
+            }
+
+            img.src = window.URL.createObjectURL(file);
+        })
+
+    }
+
+    function smoothCanvas(img, canvas, canvas2, smoothingOptions, newWidth, newHeight) {
+        return new Promise((resolve) => {
+            const context = canvas.getContext("2d");
+            const context2 = canvas2.getContext("2d")
+            if (smoothingOptions === 'bi-linear') {
+                context.drawImage(img, 0, 0, newWidth, newHeight);
+            } else {
+                // faux bi-cubic image smoothing 
+                context2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
+                context2.drawImage(img, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5);
+                context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, canvas.width, canvas.height);
+            }
+            resolve(canvas)
+        })
+
+    }
+
     return {
-        resizer: function (file, { aspectRatioPreserved = true, inputWidth, inputHeight, smoothingOptions = "bi-linear", quality = 0.7 }) {
-            const ret = {}
+        compressResizeBlobify: function (file, { aspectRatioPreserved = true, inputWidth, inputHeight, smoothingOptions = "bi-linear", quality = 0.7 }) {
+            const ret = {};
             return new Promise((resolve, reject) => {
 
-
-                // if(file.type.match(/^image\//)) file = 
-                // if (file) file.getAsFile();
-
-                // what happens if we call this on a file
-
-                /*  possible file arguments - 
-                    url
-                    uploaded file
-                    pasted file
-                    image blob
-             
-                    How is an image object represented? 
-                */
-
-                // TODO: determine what type of input it is 
-                // how do i detect the type of an input? 
-
-                // is it usable image data or not? 
-                // if usable, is it a file, url, image blob
-                // if not throw an error
-
-                // resize an image
-                // minify an image
-                // image to blob
-                //
-
-                let img = new Image();
-
-
-                img.onerror = function () {
-                    URL.revokeObjectURL(this.src);
-                    reject(Error("Cannot load Image"));
-                };
-
-                img.onload = function () {
-                    URL.revokeObjectURL(this.src);
-
-                    const [newWidth, newHeight] = calculateSize(img, aspectRatioPreserved, inputWidth, inputHeight);
-                    ret.canvas = document.createElement("canvas");
-                    ret.canvas.width = newWidth;
-                    ret.canvas.height = newHeight;
-
-                    const context = ret.canvas.getContext("2d");
-                    const canvas2 = document.createElement("canvas");
-                    const context2 = canvas2.getContext("2d")
-                    canvas2.height = newHeight * 0.5;
-                    canvas2.width = newWidth * 0.5;
-
-                    if (smoothingOptions === 'bi-linear') {
-                        context.drawImage(img, 0, 0, newWidth, newHeight);
-                    } else {
-                        // faux bi-cubic image smoothing 
-                        context2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
-                        context2.drawImage(img, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5);
-                        context.drawImage(canvas2, 0, 0, canvas2.width * 0.5, canvas2.height * 0.5, 0, 0, ret.canvas.width, ret.canvas.height);
-                    }
-
-                    ret.canvas.toBlob(
-                        (blob) => {
-                            ret.objUrl = window.URL.createObjectURL(blob);
-
-                            ret.blob = blob;
-                            blobToDataUrl(blob).then((dataURL) => {
-                                ret.dataUrl = dataURL
-                                resolve(ret)
-                            }).catch(() => { reject(Error("could not convert to blob")) });
-                        },
-                        MIME_TYPE,
-                        quality
-                    );
-                }
-
-                img.src = window.URL.createObjectURL(file);
+                resize(file, aspectRatioPreserved, inputWidth, inputHeight)
+                    .then(({ canvas, canvas2, img, newWidth, newHeight }) => {
+                        smoothCanvas(img, canvas, canvas2, smoothingOptions, newWidth, newHeight).then((canvas) => {
+                            ret.canvas = canvas
+                            canvasToBlob(ret.canvas)
+                                .then(({ dataURL, objUrl, blob }) => {
+                                    ret.dataURL = dataURL;
+                                    ret.objUrl = objUrl;
+                                    ret.blob = blob;
+                                    resolve(ret);
+                                })
+                        })
+                    })
+                    .catch(error => reject(error))
             })
-        }
-
+        },
+        smoothCanvas: smoothCanvas,
+        resize: resize,
+        canvasToBlob: canvasToBlob,
+        blobToDataUrl, blobToDataUrl,
     }
 
 })();
