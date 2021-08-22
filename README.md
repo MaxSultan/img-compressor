@@ -28,5 +28,6 @@ Canvas elements can be used to draw images via javascript. By default it does th
 - copy an image and paste in onto the webpage to have it compressed
 - drag and drop an image into a drop area to have it compressed
 
-Here are some questions I still have:
-How does Bilinear Interpolation/BiCubic Interpolation work in compression instead of expansion? In expanding the image you need more data that you have, but in compression you already have all the data you need.
+This is a demo project for an npm package I built called front-end-min:
+
+the package can be viewed on NPM here: https://www.npmjs.com/package/front-end-min
