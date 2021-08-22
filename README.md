@@ -29,6 +29,13 @@ Canvas elements can be used to draw images via javascript. By default it does th
 - copy an image and paste in onto the webpage to have it compressed
 - drag and drop an image into a drop area to have it compressed
 
+
+## Dependencies
+
 This is a demo project for an npm package I built called front-end-min:
 
 the package can be viewed on NPM here: https://www.npmjs.com/package/front-end-min
+
+it can be added via npm: `npm install front-end-min`
+
+or unpkg link: `<script src="https://unpkg.com/front-end-min@1.0.7/index.js"></script>`
