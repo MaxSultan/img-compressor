@@ -11,3 +11,13 @@
 .css-box.is-dragover {
   background-color: grey;
 }
+
+.css-box-file{
+position: absolute; 
+top: -1000px; 
+left: -1000px;
+}
+
+.css-box-input{
+  padding: 10px;
+}
