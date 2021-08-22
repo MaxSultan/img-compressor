@@ -31,7 +31,7 @@ const listen = (sel, event) => {
     }
     if (sel === 'input[name="js-box-file"]' && event === 'change') {
       file = ev.target.files[0]; // get the file
-      resize(file, {
+      Mini.resizer(file, {
         aspectRatioPreserved: aspectRatioPreserved,
         inputWidth: inputWidth,
         inputHeight: inputHeight,
@@ -39,7 +39,6 @@ const listen = (sel, event) => {
         quality: quality
       }).then(renderImageData)
 
-      // insertBreak(div);
       $('input[name="js-box-file"]').value = "";
     }
     if (['form[name="js-box"]', 'div[name="js-box-input"]', 'input[name="js-box-file"]', 'label[name="js-box-file-label"]'].includes(sel)) {
@@ -55,7 +54,7 @@ const listen = (sel, event) => {
       }
       if (event === 'drop') {
         file = ev.dataTransfer.files[0];
-        resize(file, {aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality}).then(renderImageData)
+        Mini.resizer(file, {aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality}).then(renderImageData)
       }
     }
   });
@@ -89,5 +88,5 @@ window.addEventListener("paste", (e) => {
     return;
   }
 
-  resize(file, {aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality}).then(renderImageData)
+  Mini.resizer(file, {aspectRatioPreserved, inputWidth, inputHeight, smoothingOptions, quality}).then(renderImageData)
 });
