@@ -156,15 +156,3 @@ const Mini = (function () {
 
 
 
-
-    // if ('undefined' === typeof module) {
-    //     module.exports = {
-    //         resizer: RESIZER.resize,
-    //     }
-
-    //     // export default RESIZER;
-    // }
-// }());
-
-
-
