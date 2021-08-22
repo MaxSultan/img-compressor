@@ -30,10 +30,14 @@
     <div class="js-root">
         <h1>Upload an image and see the result</h1>
         <div class="css-flex-container">
-            <form class="css-box" name="js-box" method="post" action="" enctype="multipart/form-data">
+            <form class="css-box" name="js-box" method="post" action="" enctype="multipart/form-data" onclick="
+            htmlFileInputElement.dispatchEvent(
+                new MouseEvent('click')
+            )">
                 <div class="css-box-input" name="js-box-input">
-                    <label for="js-box-file" name="js-box-file-label">Choose a file or drag it here.
-                        <input class="css-box-file" name="js-box-file" type="file" name="file" />
+                    <label for="js-box-file" name="js-box-file-label">Click or Drag here to upload a file.
+                        <input class="css-box-file" name="js-box-file" type="file" name="file"
+                            id="htmlFileInputElement" />
                     </label>
                 </div>
             </form>
@@ -71,7 +75,7 @@
                 <select name="smoothing-options">
                     <option value="">--Please choose an option--</option>
                     <option value="bi-linear" selected>Bi-linear Smoothing</option>
-                    <option value="bi-cubic">Bi-Cubic Smoothing</option>
+                    <!-- <option value="bi-cubic">Bi-Cubic Smoothing</option> -->
                 </select>
             </label>
         </form>
@@ -80,7 +84,7 @@
     <script src="js/index.js"></script>
     <script src="js/resizer.js"></script>
     <script src="js/events.js"></script>
-    
+
 </body>
 
 
