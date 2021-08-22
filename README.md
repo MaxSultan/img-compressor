@@ -22,6 +22,7 @@ Canvas elements can be used to draw images via javascript. By default it does th
 - view a preview of the compressed image
 - see the image file size before and after compression
 - download a compressed version of the image
+- copy a data url pointing to the image
 - customize the quality of the compressed image
 - customize the dimensions of the image
 - chose to perserve or disregard the aspect ratio of the image
