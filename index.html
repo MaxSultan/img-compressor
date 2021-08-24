@@ -1,89 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Lossy Image Converter</title>
-    <meta name="description" content="Lossy image compression through an HTML5 Canvas Element">
-    <meta name="author" content="Max Sultan">
+    <meta
+      name="description"
+      content="Lossy image compression through an HTML5 Canvas Element"
+    />
+    <meta name="author" content="Max Sultan" />
 
-    <meta property="og:title" content="A Basic HTML5 Template">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://maxsultan.github.io/img-compressor/">
-    <meta property="og:description" content="Lossy image compression through an HTML5 Canvas Element">
-    <meta property="og:image" content="image.png">
+    <meta property="og:title" content="A Basic HTML5 Template" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://maxsultan.github.io/img-compressor/" />
+    <meta
+      property="og:description"
+      content="Lossy image compression through an HTML5 Canvas Element"
+    />
+    <meta property="og:image" content="image.png" />
 
     <!-- <link rel="icon" href="/favicon.ico"> -->
     <!-- <link rel="icon" href="/favicon.svg" type="image/svg+xml"> -->
     <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png"> -->
-    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/image.css">
-    <link rel="stylesheet" href="css/drag-and-drop.css">
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/image.css" />
+    <link rel="stylesheet" href="css/drag-and-drop.css" />
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div class="js-root">
-        <h1>Upload an image and see the result</h1>
-        <div class="css-flex-container">
-            <form class="css-box" name="js-box" method="post" action="" enctype="multipart/form-data" onclick="
+      <h1>Upload an image and see the result</h1>
+      <div class="css-flex-container">
+        <form
+          class="css-box"
+          name="js-box"
+          method="post"
+          action=""
+          enctype="multipart/form-data"
+          onclick="
             htmlFileInputElement.dispatchEvent(
                 new MouseEvent('click')
-            )">
-                <div class="css-box-input" name="js-box-input">
-                    <label for="js-box-file" name="js-box-file-label">Click or Drag here to upload a file.
-                        <input class="css-box-file" name="js-box-file" type="file" name="file"
-                            id="htmlFileInputElement" />
-                    </label>
-                </div>
-            </form>
-            <h1>OR</h1>
-            <label>Paste an Image or Image URL:
-                <input type="url" ... />
+            )"
+        >
+          <div class="css-box-input" name="js-box-input">
+            <label for="js-box-file" name="js-box-file-label"
+              >Click or Drag here to upload a file.
+              <input
+                class="css-box-file"
+                name="js-box-file"
+                type="file"
+                name="file"
+                id="htmlFileInputElement"
+              />
             </label>
-        </div>
-        <button name="js-settings-button">Show Settings</button>
-        <form class="js-settings-form" style="display: none">
-            <label for="image-quality">Image Quality:
-                <select name="image-quality">
-                    <option value="">--Please choose an option--</option>
-                    <option value="0.1">10%</option>
-                    <option value="0.2">20%</option>
-                    <option value="0.3">30%</option>
-                    <option value="0.4">40%</option>
-                    <option value="0.5">50%</option>
-                    <option value="0.6">60%</option>
-                    <option value="0.7" selected>70%</option>
-                    <option value="0.8">80%</option>
-                    <option value="0.9">90%</option>
-                    <option value="1.0">100%</option>
-                </select>
-            </label>
-            <fieldset>
-                <p>Maximum Dimensions: </p>
-                <label for="js-height">H: <input name="js-height" type="number" step="1" min="-1"></label>
-                x
-                <label for="js-width">W: <input name="js-width" type="number" step="1" min="-1"></label>
-                <label for="js-aspect-ratio">
-                    <input name="js-aspect-ratio" type="checkbox" checked> Preserve Aspect Ratio</label>
-            </fieldset>
-            <label for="smoothing-options">Smoothing Options:
-                <select name="smoothing-options">
-                    <option value="">--Please choose an option--</option>
-                    <option value="bi-linear" selected>Bi-linear Smoothing</option>
-                    <!-- <option value="bi-cubic">Bi-Cubic Smoothing</option> -->
-                </select>
-            </label>
+          </div>
         </form>
-        <div class="js-images-container"></div>
+        <h1>OR</h1>
+        <label
+          >Paste an Image or Image URL:
+          <input name="js-img-paste-box" type="url" />
+        </label>
+      </div>
+      <button name="js-settings-button">Show Settings</button>
+      <form class="js-settings-form" style="display: none">
+        <label for="image-quality"
+          >Image Quality:
+          <select name="image-quality">
+            <option value="">--Please choose an option--</option>
+            <option value="0.1">10%</option>
+            <option value="0.2">20%</option>
+            <option value="0.3">30%</option>
+            <option value="0.4">40%</option>
+            <option value="0.5">50%</option>
+            <option value="0.6">60%</option>
+            <option value="0.7" selected>70%</option>
+            <option value="0.8">80%</option>
+            <option value="0.9">90%</option>
+            <option value="1.0">100%</option>
+          </select>
+        </label>
+        <fieldset>
+          <p>Maximum Dimensions:</p>
+          <label for="js-height"
+            >H: <input name="js-height" type="number" step="1" min="-1"
+          /></label>
+          x
+          <label for="js-width"
+            >W: <input name="js-width" type="number" step="1" min="-1"
+          /></label>
+          <label for="js-aspect-ratio">
+            <input name="js-aspect-ratio" type="checkbox" checked />
+            Preserve Aspect Ratio</label
+          >
+        </fieldset>
+        <label for="smoothing-options"
+          >Smoothing Options:
+          <select name="smoothing-options">
+            <option value="">--Please choose an option--</option>
+            <option value="bi-linear" selected>Bi-linear Smoothing</option>
+            <!-- <option value="bi-cubic">Bi-Cubic Smoothing</option> -->
+          </select>
+        </label>
+      </form>
+      <div class="js-images-container"></div>
     </div>
     <script src="https://unpkg.com/front-end-min@1.0.7/index.js"></script>
     <script src="js/index.js"></script>
     <script src="js/events.js"></script>
-</body>
-
-
+  </body>
 </html>
