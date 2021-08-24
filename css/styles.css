@@ -1,26 +1,26 @@
-body{
-    padding: 20px;
+body {
+  padding: 20px;
 }
-button[name="js-settings-button"]{
-    width: 180px;
+button[name='js-settings-button'] {
+  width: 180px;
 }
-.js-images-container{
-    /* display: flex; */
-    justify-content: space-evenly;
-    overflow-x: scroll;
-    padding: 50px;
+.js-images-container {
+  /* display: flex; */
+  justify-content: space-evenly;
+  overflow-x: scroll;
+  padding: 50px;
 }
 fieldset {
-    border-style: none;
+  border-style: none;
 }
 fieldset label {
-    display: inline-block;
+  display: inline-block;
 }
 button:active {
-    filter: brightness(85%);
+  filter: brightness(85%);
 }
-.css-flex-container{
-    display:flex;
-    justify-content: space-between;
-    max-width: 50vw;
+.css-flex-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 50vw;
 }
