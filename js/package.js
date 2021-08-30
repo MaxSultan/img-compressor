@@ -91,7 +91,7 @@ const Mini = (function () {
         inputHeight,
       );
 
-      resolve({ newWidth, newHeight });
+      resolve({ img, newWidth, newHeight });
       reject('Could not Resize Image');
     });
   }
@@ -130,11 +130,12 @@ const Mini = (function () {
     });
   }
 
-  function imageify(file) {
-    // what can we input here
-    // What types of input do we support? File, Url, Blob?
+  function imageify(input) {
     return new Promise((resolve, reject) => {
       const img = new Image();
+
+      //   img.setAttribute('crossOrigin', '');
+      img.crossOrigin = 'Anonymous';
 
       img.onload = () => {
         URL.revokeObjectURL(img.src);
@@ -145,8 +146,11 @@ const Mini = (function () {
         URL.revokeObjectURL(img.src);
         reject(error);
       };
-
-      img.src = window.URL.createObjectURL(file);
+      if (typeof input === 'string') {
+        img.src = input + '?' + new Date().getTime();
+      } else {
+        img.src = window.URL.createObjectURL(input);
+      }
     });
   }
 
@@ -165,7 +169,7 @@ const Mini = (function () {
       imageify(file)
         .then((img) => {
           calculateNewDims(img, aspectRatioPreserved, inputWidth, inputHeight).then(
-            ({ newWidth, newHeight }) => {
+            ({ img, newWidth, newHeight }) => {
               resizeImage(img, smoothingOptions, newWidth, newHeight).then((canvas) => {
                 ret.canvas = canvas;
                 blobifyCanvas(canvas, quality).then((blob) => {

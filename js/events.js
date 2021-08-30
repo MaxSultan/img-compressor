@@ -116,24 +116,46 @@ listen('input[name="js-box-file"]', 'change');
 });
 
 window.addEventListener('paste', (e) => {
-  var item = Array.from(e.clipboardData.items).find((x) => /^image\//.test(x.type));
-  try {
-    file = item.getAsFile();
-  } catch {
-    alert('This is not an image element');
+  // debugger;
+  //
+  let paste = (e.clipboardData || window.clipboardData).getData('text');
+  debugger;
+  if (paste) {
+    Mini.compressResizeBlobify(paste, {
+      aspectRatioPreserved,
+      inputWidth,
+      inputHeight,
+      smoothingOptions,
+      quality,
+    })
+      .then(renderImageData)
+      .catch((error) => {
+        alert(error);
+        clearInputs();
+      });
     return;
   }
 
-  Mini.compressResizeBlobify(file, {
-    aspectRatioPreserved,
-    inputWidth,
-    inputHeight,
-    smoothingOptions,
-    quality,
-  })
-    .then(renderImageData)
-    .catch((error) => {
-      alert(error);
-      clearInputs();
-    });
+  var item = Array.from(e.clipboardData.items).find((x) => /^image\//.test(x.type));
+  if (item) {
+    try {
+      file = item.getAsFile();
+    } catch {
+      alert('This is not an image element');
+      return;
+    }
+
+    Mini.compressResizeBlobify(file, {
+      aspectRatioPreserved,
+      inputWidth,
+      inputHeight,
+      smoothingOptions,
+      quality,
+    })
+      .then(renderImageData)
+      .catch((error) => {
+        alert(error);
+        clearInputs();
+      });
+  }
 });
